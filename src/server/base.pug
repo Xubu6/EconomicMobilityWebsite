@@ -1,0 +1,60 @@
+html(lang="en")
+    head
+        meta(charset="utf-8")
+        meta(http-equiv="X-UA-Compatible", content="IE=edge")
+        meta(name="viewport", content="width=device-width, initial-scale=1")
+        title Grahams Solitaire Application
+        style(type="text/css").
+            @font-face {
+                font-family: 'Roboto';
+                font-style: normal;
+                font-weight: 300;
+                src: url(/fonts/Roboto-Light-webfont.woff2) format('woff2');
+            }
+
+            @font-face {
+                font-family: 'Roboto';
+                font-style: normal;
+                font-weight: 400;
+                src: url(/fonts/Roboto-Normal-webfont.woff2) format('woff2');
+            }
+
+            @font-face {
+                font-family: 'Roboto';
+                font-style: normal;
+                font-weight: 700;
+                src: url(/fonts/Roboto-Bold-webfont.woff2) format('woff2');
+            }
+
+            @font-face {
+                font-family: 'Ubuntu';
+                font-style: normal;
+                font-weight: 400;
+                src: url(/fonts/Ubuntu-Light-webfont.woff2) format('woff2');
+            }
+
+            @font-face {
+                font-family: 'Ubuntu';
+                font-style: normal;
+                font-weight: 700;
+                src: url(/fonts/Ubuntu-Normal-webfont.woff2) format('woff2');
+            }
+        style(type="text/css").
+            html {
+                font-family: 'Roboto', sans-serif;
+                font-weight: 300;
+            }
+
+            body {
+                margin: 0;
+                padding: 0;
+            }
+
+            #mainDiv {
+                width: 100%;
+            }
+    body
+        div#mainDiv
+        script.
+            window.__PRELOADED_STATE__ = !{state}
+        script(src="/js/main.js")

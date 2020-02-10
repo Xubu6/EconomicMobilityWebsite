@@ -1,0 +1,20 @@
+{
+  "url": "http://localhost",
+  "api_version": "/v1",
+  "mongodb": "mongodb://127.0.0.1:27017/zillow",
+  "port": 8080,
+  "environments" : {
+    "test": {
+      "mongodb": "mongodb://192.168.99.100:27018/testing",
+      "port": 8081
+    },
+    "travis": {
+      "mongodb": "mongodb://127.0.0.1:27017/testing"
+    }
+  },
+  "security": {
+    "keyPath":"/etc/letsencrypt/live/studier.me/privkey.pem",
+    "certPath":"/etc/letsencrypt/live/studier.me/fullchain.pem",
+    "caPath": "/etc/letsencrypt/live/studier.me/chain.pem"
+  }
+}
