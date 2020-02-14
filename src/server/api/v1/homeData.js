@@ -2,8 +2,6 @@
 "use strict";
 
 const Joi = require("@hapi/joi");
-const { filterGameForProfile } = require("../../solitare");
-const { validPassword } = require("../../../shared");
 
 module.exports = app => {
 
@@ -37,12 +35,15 @@ module.exports = app => {
      * @return {200, {username, primary_email, first_name, last_name, city, games[...]}}
      */
     app.get("/v1/homeData/:zipcode", async (req, res) => {
-        let homes = await app.models.Home.findOne({
+        console.log(req.params.zipcode);
+        let homes = await app.models.Home.find({
             zip: req.params.zipcode.toLowerCase()
         });
 
+        console.log(homes);
+
         if (!homes)
-            res.status(404).send({ error: `unknown zipcode: ${req.params.username}` });
+            res.status(404).send({error: `unknown zipcode: ${req.params.username}`});
         else {
             // Filter games data for only profile related info
             const filteredHomes = homes.map(home => {
@@ -53,7 +54,8 @@ module.exports = app => {
                     bedrooms: home.bedrooms,
                     bathrooms: home.bathrooms,
                     sqft: home.sqft
-                }});
+                }
+            });
 
             // This is where we will do the data priming to show inequality.. figure out specifics from eunji
 

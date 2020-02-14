@@ -82,7 +82,7 @@ const setupServer = async () => {
 
     // Import our Data Models
     app.models = {
-        Home: require("./models/homes"),
+        Home: require("./models/home"),
     };
 
     // Import our routes

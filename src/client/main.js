@@ -3,6 +3,9 @@ import { render } from "react-dom";
 import styled from "styled-components";
 import { BrowserRouter, Route, Redirect } from "react-router-dom";
 
+import {HouseSearch} from "./components/housesearch";
+import {Header} from "./components/header";
+
 
 const GridBase = styled.div`
   display: grid;
@@ -36,26 +39,12 @@ class MyApp extends Component {
 
     render() {
         return (
+            <div>
+            <Header/>
             <BrowserRouter>
-            <GridBase>
-            <Header user={this.state.username} email={this.state.primary_email} />
-        <Route exact path="/" component={Landing} />
-        <Route
-        path="/homes"
-        render={props =>
-        this.loggedIn() ? (
-            <Redirect to={`/profile/${this.state.username}`} />
-    ) : (
-        <Login {...props} logIn={this.logIn} />
-    )
-    }
-        />
-        <Route
-        path="/homes/:zipcode"
-        render={props => <Results {...props} zipcode={this.props.zipcode} />}
-        />
-        </GridBase>
-        </BrowserRouter>
+            <Route path="/" component={HouseSearch} />
+            </BrowserRouter>
+            </div>
     );
     }
 }
