@@ -3,10 +3,12 @@
 import React, { useState } from 'react';
 import styled from "styled-components";
 import {HouseCardList} from "./housecardlist";
+import {GoogleMapDisplay} from "./googlemapdisplay";
 
 /*************************************************************************/
 
 const LandingBase = styled.div`
+    justify-content: right;
 `;
 
 const SearchBar = styled.div`
@@ -26,6 +28,12 @@ const FormInput = styled.input`
   padding-left: 5px;
 `;
 
+const ContentRow = styled.div`
+  display: flex;
+  width: 100%;
+  height: 80%;
+`;
+
 export const HouseSearch = () => {
 
     const [houses, setHouses] = useState([]);
@@ -34,7 +42,7 @@ export const HouseSearch = () => {
 
         console.log("here we are");
 
-        fetch("/v1/homeData/10019", {
+        fetch("/v1/homeData/34652", {
             // body: JSON.stringify({
             //     username: 'doesnt',
             //     password: 'matter',
@@ -58,6 +66,9 @@ export const HouseSearch = () => {
             <FormInput id={"zip"} placeholder="ZIP Code"/>
             <button onClick={onSubmit}>Search</button>
         </SearchBar>
-        <HouseCardList style={{width: "40%"}} houses={houses}/>
+        <ContentRow>
+            <GoogleMapDisplay house={houses}/>
+            <HouseCardList style={{width: "40%", alignSelf: 'flex-end'}} houses={houses}/>
+        </ContentRow>
     </LandingBase>);
 };

@@ -4,3 +4,5 @@ public/js/main.*
 public/js/vendor.*
 *.swo
 *.swp
+
+/public/testImages/*

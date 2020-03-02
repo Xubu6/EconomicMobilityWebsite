@@ -1,9 +1,10 @@
 /* Copyright G. Hemingway, 2019 - All rights reserved */
 "use strict";
 
-import React from "react";
+import React, { useState} from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
+import {HouseDetailsModal} from './housedetailsmodal';
 
 /*************************************************************************/
 
@@ -14,13 +15,16 @@ import styled from "styled-components";
 // `;
 
 let CardBase = styled.div`
-  width: 99%;
+  width: 46%;
+  justify-content: flex-end;
+  height: 50%;
+  padding: 2%;
 `;
 
 let PrincipalImg = styled.img`
   position: relative;
-  height: auto;
   width: 100%;
+  height: 70%
 `;
 
 let HomeDetailsStyle = styled.div`
@@ -78,20 +82,30 @@ const PileBase = styled.div`
 `;
 
 const CardCol = styled.div`
+  align-items: flex-end;
+  text-align: right;
+  display: flex;
   flex-direction: row;
-  flex-wrap: nowrap;
-  justify-content: flex-end;
+  flex-wrap: wrap;
   grid-row: 2;
   grid-column: 2 / 7;
   overflow: auto;
-  height: 80%;
+  height: 100%;
   // height: auto;
-  width: 40%
+  width: 50%;
+  align-content: space-between;
+  box-shadow: -5px 0px 5px 3px #D3D3D3;
 `;
 
 export const HouseCardList = ({houses}) => {
     console.log(houses);
+
     const children = houses.map((houseInfo, i) => {
+        const [show, setShow] = useState(false);
+
+        const handleClose = () => setShow(false);
+        const handleShow = () => setShow(true);
+
         return (
             <HouseCard
                 key={i}
@@ -101,7 +115,20 @@ export const HouseCardList = ({houses}) => {
                 bedrooms={houseInfo.bedrooms}
                 bathrooms={houseInfo.bathrooms}
                 sqft={houseInfo.sqft}
-            />
+                onClick={handleShow}
+            >
+                <HouseDetailsModal
+                    show={show}
+                    handleClose={handleClose}
+                    address={houseInfo.address}
+                    price={houseInfo.price}
+                    photos={houseInfo.photos}
+                    bedrooms={houseInfo.bedrooms}
+                    bathrooms={houseInfo.bathrooms}
+                    sqft={houseInfo.sqft}
+                >
+                </HouseDetailsModal>
+            </HouseCard>
         );
     });
     return (
