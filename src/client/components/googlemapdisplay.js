@@ -40,11 +40,11 @@ export const GoogleMapDisplay = ({ houses = "", email = "" }) => {
     return (
         <GoogleMapBase>
             <GoogleMapReact
-                bootstrapURLKeys={{ key: "AIzaSyCYto64Ak34HVWuvAxhOfg-wErJeFXqUqM" }}
+                bootstrapURLKeys={{ key: "AIzaSyDL_A5wQnUSyio3otmRzu3N5yl9-eaQyZY" }}
                 defaultCenter={center}
                 defaultZoom={4}
             >
             </GoogleMapReact>
         </GoogleMapBase>
     );
-}
+};

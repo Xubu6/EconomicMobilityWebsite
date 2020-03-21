@@ -2,9 +2,12 @@
 "use strict";
 
 import React from "react";
-import Modal from 'react-bootstrap-modal'
+import ReactDOM from 'react-dom';
+import Modal from 'react-modal';
 import PropTypes from "prop-types";
 import styled from "styled-components";
+
+import {DetailedHouseCard} from "./detailedhousecard";
 
 /*************************************************************************/
 /*
@@ -18,22 +21,53 @@ show={show}
                     sqft={houseInfo.sqft}
  */
 
-export const HouseDetailsModal = ({show, handleClose, address, price, photots, bedrooms, bathrooms, sqft}) => {
+Modal.setAppElement('#mainDiv');
+
+const customStyles = {
+    content : {
+        position              : "absolute",
+        height                : "80%",
+        top                   : '10%',
+        left                  : '15%',
+        right                 : '15%',
+        bottom                : '0%',
+        overflow              : 'hide'
+        //marginRight           : '-50%',
+        //transform             : 'translate(-50%, -50%)'
+    }
+};
+
+export const HouseDetailsModal = ({show, handleClose, address, price, photos, bedrooms, bathrooms, sqft}) => {
+
+    function openModal() {
+        //setIsOpen(true);
+        console.log("open da modal");
+    }
+
+    function afterOpenModal() {
+        // references are now sync'd and can be accessed.
+        //subtitle.style.color = '#f00';
+    }
+
+    function closeModal(){
+        setIsOpen(false);
+    }
 
     return (
-            <Modal show={show} onHide={handleClose} animation={false}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Modal heading</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={handleClose}>
-                        Close
-                    </Button>
-                    <Button variant="primary" onClick={handleClose}>
-                        Save Changes
-                    </Button>
-                </Modal.Footer>
+            <Modal
+                isOpen={show}
+                onAfterOpen={afterOpenModal}
+                onRequestClose={handleClose}
+                style={customStyles}
+                contentLabel="Example Modal"
+            >
+                <button onClick={handleClose}>close</button>
+                <DetailedHouseCard style={{
+                    position: 'relative',
+                    height: "80%",
+                    width: "80%"
+                }} show={show}
+                    address={address} price={price} photos={photos} bedrooms={bedrooms} bathrooms={bathrooms} sqft={sqft}/>
             </Modal>
     );
 };

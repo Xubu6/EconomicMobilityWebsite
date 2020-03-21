@@ -42,7 +42,9 @@ export const HouseSearch = () => {
 
         console.log("here we are");
 
-        fetch("/v1/homeData/34652", {
+        let zipCode = document.getElementById("zip").value;
+
+        fetch(`/v1/homeData/${zipCode}`, {
             // body: JSON.stringify({
             //     username: 'doesnt',
             //     password: 'matter',
@@ -55,6 +57,9 @@ export const HouseSearch = () => {
             }
         }).then(res => res.json())
             .then(data => {
+                if (data.error)
+                    return; // FIXME change to show an error message to the user
+
                 let text;
                 text = data.homes[0].address;
                 setHouses(data.homes);

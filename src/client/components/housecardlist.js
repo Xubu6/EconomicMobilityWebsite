@@ -55,7 +55,7 @@ let HomeDetails = ({bedrooms, bathrooms, sqft, price}) => {
     return (
         <CardDetails>
             <HomeDetailsStyle>
-                <HomePriceStyle placement={'left'}>{price}</HomePriceStyle>
+                <HomePriceStyle placement={'left'}>${price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</HomePriceStyle>
                 <HomeInfoStyle placement={'right'}>{bedrooms} bd | {bathrooms} ba | {sqft} sqft </HomeInfoStyle>
                 {/*<HomeInfoStyle placement={'right'}>{bathrooms} bath </HomeInfoStyle>*/}
                 {/*<HomeInfoStyle placement={'right'}>{sqft} sqft </HomeInfoStyle>*/}
@@ -64,11 +64,15 @@ let HomeDetails = ({bedrooms, bathrooms, sqft, price}) => {
     );
 };
 
-export const HouseCard = ({ address, price, photos, bedrooms, bathrooms, sqft}) => {
+export const HouseCard = ({ address, price, photos, bedrooms, bathrooms, sqft, onClick}) => {
+
     return (<CardBase>
-        <PrincipalImg src={`${photos[0]}`}/>
-        <HomeDetails bedrooms={bedrooms} bathrooms={bathrooms} sqft={sqft} price={price}/>
-        <AddressDetails>{address.replace(/_/g, ' ')}</AddressDetails>
+        <PrincipalImg src={`${photos[0]}`} onClick={() => onClick(address, price, photos, bedrooms, bathrooms, sqft)}/>
+        <HomeDetails bedrooms={bedrooms} bathrooms={bathrooms} sqft={sqft} price={price}
+                     onClick={() => onClick(address, price, photos, bedrooms, bathrooms, sqft)}/>
+        <AddressDetails
+            onClick={() => onClick(address, price, photos, bedrooms, bathrooms, sqft)}
+        >{address.replace(/-/g, ' ')}</AddressDetails>
     </CardBase>);
 };
 
@@ -97,14 +101,36 @@ const CardCol = styled.div`
   box-shadow: -5px 0px 5px 3px #D3D3D3;
 `;
 
+const HouseModalStyle = {
+    height: "100px",
+    width: "80%"
+};
+
 export const HouseCardList = ({houses}) => {
     console.log(houses);
 
-    const children = houses.map((houseInfo, i) => {
-        const [show, setShow] = useState(false);
+    const [show, setShow] = useState(false);
+    const [targetHouse, setTargetHouse] = useState(null);
 
-        const handleClose = () => setShow(false);
-        const handleShow = () => setShow(true);
+    const handleClose = () => {
+        console.log("Don't show house modal");
+        setTargetHouse(null);
+        setShow(false);
+    };
+    const handleShow = (address, price, photos, bedrooms, bathrooms, sqft) => {
+        console.log("Show house modal");
+        setTargetHouse({
+            address: address,
+            price: price,
+            photos: photos,
+            bedrooms: bedrooms,
+            bathrooms: bathrooms,
+            sqft: sqft
+        });
+        setShow(true);
+    };
+
+    const children = houses.map((houseInfo, i) => {
 
         return (
             <HouseCard
@@ -116,24 +142,19 @@ export const HouseCardList = ({houses}) => {
                 bathrooms={houseInfo.bathrooms}
                 sqft={houseInfo.sqft}
                 onClick={handleShow}
-            >
-                <HouseDetailsModal
-                    show={show}
-                    handleClose={handleClose}
-                    address={houseInfo.address}
-                    price={houseInfo.price}
-                    photos={houseInfo.photos}
-                    bedrooms={houseInfo.bedrooms}
-                    bathrooms={houseInfo.bathrooms}
-                    sqft={houseInfo.sqft}
-                >
-                </HouseDetailsModal>
-            </HouseCard>
+            />
         );
     });
     return (
         <CardCol>
             {children}
+            <HouseDetailsModal
+                show={show}
+                handleClose={handleClose}
+                style={HouseModalStyle}
+                {...targetHouse}
+            >
+            </HouseDetailsModal>
         </CardCol>
     );
 };
