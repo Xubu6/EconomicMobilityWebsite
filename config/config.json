@@ -2,7 +2,7 @@
   "url": "http://localhost",
   "api_version": "/v1",
   "mongodb": "mongodb://127.0.0.1:27017/zillow",
-  "port": 80,
+  "port": 8080,
   "environments" : {
     "test": {
       "mongodb": "mongodb://192.168.99.100:27018/testing",
