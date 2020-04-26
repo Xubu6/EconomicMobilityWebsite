@@ -1,4 +1,4 @@
-/* Copyright G. Hemingway, 2019 - All rights reserved */
+/* Copyright D. Ryan @2019 - All rights reserved */
 "use strict";
 
 import React, { useState} from "react";
@@ -64,16 +64,16 @@ let HomeDetails = ({bedrooms, bathrooms, sqft, price}) => {
     );
 };
 
-export const HouseCard = ({ address, price, photos, bedrooms, bathrooms, sqft, onClick}) => {
-
-    return (<CardBase>
-        <PrincipalImg src={`${photos[0]}`} onClick={() => onClick(address, price, photos, bedrooms, bathrooms, sqft)}/>
+export const HouseCard = ({ _id, address, price, photos, bedrooms, bathrooms, sqft, onClick}) => {
+    return ((photos[0]) ? (<CardBase>
+        <PrincipalImg src={`${photos[0].replace('/images/', 'https://zillowprojs3.s3.us-east-2.amazonaws.com/')}`}
+                      onClick={() => onClick(_id, address, price, photos, bedrooms, bathrooms, sqft)}/>
         <HomeDetails bedrooms={bedrooms} bathrooms={bathrooms} sqft={sqft} price={price}
-                     onClick={() => onClick(address, price, photos, bedrooms, bathrooms, sqft)}/>
+                     onClick={() => onClick(_id, address, price, photos, bedrooms, bathrooms, sqft)}/>
         <AddressDetails
-            onClick={() => onClick(address, price, photos, bedrooms, bathrooms, sqft)}
+            onClick={() => onClick(_id, address, price, photos, bedrooms, bathrooms, sqft)}
         >{address.replace(/-/g, ' ')}</AddressDetails>
-    </CardBase>);
+    </CardBase>) : (<div></div>));
 };
 
 /*************************************************************************/
@@ -107,7 +107,7 @@ const HouseModalStyle = {
 };
 
 export const HouseCardList = ({houses}) => {
-    console.log(houses);
+    //console.log(houses);
 
     const [show, setShow] = useState(false);
     const [targetHouse, setTargetHouse] = useState(null);
@@ -117,9 +117,10 @@ export const HouseCardList = ({houses}) => {
         setTargetHouse(null);
         setShow(false);
     };
-    const handleShow = (address, price, photos, bedrooms, bathrooms, sqft) => {
-        console.log("Show house modal");
+    const handleShow = (_id, address, price, photos, bedrooms, bathrooms, sqft) => {
+        console.log(`Show house modal`);
         setTargetHouse({
+            _id: _id,
             address: address,
             price: price,
             photos: photos,
@@ -135,6 +136,7 @@ export const HouseCardList = ({houses}) => {
         return (
             <HouseCard
                 key={i}
+                _id={houseInfo._id}
                 address={houseInfo.address}
                 price={houseInfo.price}
                 photos={houseInfo.photos}
@@ -149,9 +151,9 @@ export const HouseCardList = ({houses}) => {
         <CardCol>
             {children}
             <HouseDetailsModal
+                style={HouseModalStyle}
                 show={show}
                 handleClose={handleClose}
-                style={HouseModalStyle}
                 {...targetHouse}
             >
             </HouseDetailsModal>

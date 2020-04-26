@@ -32,8 +32,8 @@ export const GoogleMapDisplay = ({ houses = "", email = "" }) => {
     // });
 
     let center = {
-        lat: 36.12,
-        lng: 86.78
+        lat: 29.187,
+        lng: -82.14
     };
 
 
@@ -41,8 +41,8 @@ export const GoogleMapDisplay = ({ houses = "", email = "" }) => {
         <GoogleMapBase>
             <GoogleMapReact
                 bootstrapURLKeys={{ key: "AIzaSyDL_A5wQnUSyio3otmRzu3N5yl9-eaQyZY" }}
-                defaultCenter={center}
-                defaultZoom={4}
+                center={center}
+                defaultZoom={6}
             >
             </GoogleMapReact>
         </GoogleMapBase>

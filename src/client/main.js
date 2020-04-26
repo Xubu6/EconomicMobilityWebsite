@@ -3,6 +3,7 @@ import { render } from "react-dom";
 import styled from "styled-components";
 import { BrowserRouter, Route, Redirect } from "react-router-dom";
 
+import {Login} from "./components/login";
 import {HouseSearch} from "./components/housesearch";
 import {Header} from "./components/header";
 
@@ -33,8 +34,39 @@ class MyApp extends Component {
         super(props);
         // If the user has logged in, grab info from sessionStorage
         const data = window.__PRELOADED_STATE__;
-        this.state = data.username ? data : {};
-        console.log(`Starting the webpage`);
+        this.state = (data.respondentId) ? data : {};
+        console.log(`Starting as respondent: ${this.state.respondent}`);
+
+        this.loggedIn = this.loggedIn.bind(this);
+        this.logIn = this.logIn.bind(this);
+        this.logOut = this.logOut.bind(this);
+    }
+
+    loggedIn() {
+        return this.state.respondentId && this.state.experimentalGroup;
+    }
+
+    logIn(respondentId) {
+        console.log(`called login function with ${respondentId}`);
+        fetch(`/v1/respondent/${respondentId}`)
+            .then(res => res.json())
+            .then(res => {
+                this.setState(res.respondent);
+            })
+            .catch(() => {
+                alert("An unexpected error occurred.");
+                this.logOut();
+            });
+    }
+
+    logOut() {
+        fetch("/v1/respondent", {
+            method: "DELETE",
+            credentials: "include"
+        }).then(() => {
+            // Reset user state
+            this.setState(defaultUser);
+        });
     }
 
     render() {
@@ -42,7 +74,11 @@ class MyApp extends Component {
             <div>
             <Header/>
             <BrowserRouter>
-            <Route path="/" component={HouseSearch} />
+                <Route path="/" render={props =>
+                    this.loggedIn() ?
+                        (<HouseSearch {...props}/>):
+                        (<Login {...props} logIn={this.logIn}/>)
+                }/>
             </BrowserRouter>
             </div>
     );

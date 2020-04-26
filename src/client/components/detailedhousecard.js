@@ -1,6 +1,9 @@
 import styled from "styled-components";
-import React from "react";
+import React, {useState} from "react";
 import {DetailedCardPhotoList} from "./detailedcardphotolist"
+import {MyRating} from "./ratings";
+import {Button} from "react-bootstrap";
+import {Classification} from "./classification";
 
 let CardBase = styled.div`
   display: flex;
@@ -28,9 +31,10 @@ let CardDetails = styled.div`
   display: flex;
   //position: absolute;
   width: 50%;
-  height: 15%;
+  height: 50%;
   flex-direction: column;
   justify-content: space-around;
+  align-content: center;
 `;
 
 let HomeInfoStyle = styled.div`
@@ -63,26 +67,68 @@ let DetailedPhotosList = styled.div`
     float: left;
 `;
 
-let DetailedHomeDetails = ({address, bedrooms, bathrooms, sqft, price}) => {
+let DetailedHomeDetails = ({_id, address, bedrooms, bathrooms, sqft, price, handleClose}) => {
+
+    const [rating1, setRating1] = useState(0);
+    const [rating2, setRating2] = useState(0);
+    const [rating3, setRating3] = useState(0);
+
+    let submitRatings = () => {
+        // implement rating submission logic here
+        console.log(`Verify {${rating1}, ${rating2}, ${rating3}} and submit them`);
+
+        fetch("/v1/rating", {
+            body: JSON.stringify({
+                _id: _id,
+                address: address,
+                rating1: rating1,
+                rating2: rating2,
+                rating3: rating3
+            }),
+            method: "POST",
+            credentials: "include",
+            headers: {
+                "content-type": "application/json"
+            }
+        }).then(res => {
+            res.json().then(data => {
+                if (res.ok) {
+                    console.log(`Saved rating with ${data.address}`);
+                } else {
+                    Console.log(`Rating error for address: ${data.address}`);
+                }
+            });
+        });
+        handleClose();
+    };
+
     return (
         <CardDetails>
-            <AddressDetails
-                onClick={() => onClick(address, price, photos, bedrooms, bathrooms, sqft)}
-            >{address.replace(/-/g, ' ')}</AddressDetails>
+            <AddressDetails>{address.replace(/-/g, ' ')}</AddressDetails>
             <HomeDetailsStyle>
                 <HomePriceStyle>${price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</HomePriceStyle>
                 <HomeInfoStyle>{bedrooms} bd | {bathrooms} ba | {sqft} sqft </HomeInfoStyle>
                 {/*<HomeInfoStyle placement={'right'}>{bathrooms} bath </HomeInfoStyle>*/}
                 {/*<HomeInfoStyle placement={'right'}>{sqft} sqft </HomeInfoStyle>*/}
             </HomeDetailsStyle>
+            <MyRating rating={rating1} setRating={setRating1} displayName={"Cleanliness"}/>
+            <MyRating rating={rating2} setRating={setRating2} displayName={"Curb Appeal"}/>
+            <MyRating rating={rating3} setRating={setRating3} displayName={"Livability"}/>
+            <div style={{width: "100%", textAlign: "center"}}>
+                <Button variant={"primary"} style={{width: "20%", textAlign: "center"}} size={"sm"} onClick={submitRatings}>Submit Ratings</Button>
+            </div>
+            <br/>
+            <br/>
+            <Classification handleClose={handleClose} _id={_id} address={address} />
         </CardDetails>
     );
 };
 
-export const DetailedHouseCard = ({ show, address, price, photos, bedrooms, bathrooms, sqft, onClick}) => {
+export const DetailedHouseCard = ({ show, _id, address, price, photos, bedrooms, bathrooms, sqft, handleClose}) => {
     if (!show){
-        return <div></div>;
+        return <div/>;
     }
+
     return (<CardBase>
         <DetailedPhotosList>
             <DetailedCardPhotoList photos={photos}/>
@@ -92,7 +138,6 @@ export const DetailedHouseCard = ({ show, address, price, photos, bedrooms, bath
             height: '30%',
             display: 'flex',
             float: 'right'
-        }} address={address} bedrooms={bedrooms} bathrooms={bathrooms} sqft={sqft} price={price}
-                             onClick={() => onClick(address, price, photos, bedrooms, bathrooms, sqft)}/>
+        }} _id={_id} address={address} bedrooms={bedrooms} bathrooms={bathrooms} sqft={sqft} price={price} handleClose={handleClose}/>
     </CardBase>);
 };

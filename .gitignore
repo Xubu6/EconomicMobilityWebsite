@@ -6,3 +6,4 @@ public/js/vendor.*
 *.swp
 
 /public/testImages/*
+/public/images/*

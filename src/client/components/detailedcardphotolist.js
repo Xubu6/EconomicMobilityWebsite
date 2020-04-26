@@ -1,7 +1,5 @@
 import styled from "styled-components";
 import React from "react";
-import {HouseCard} from "./housecardlist";
-
 
 let DetailedImage = styled.img`
   position: relative;
@@ -24,17 +22,22 @@ const CardCol = styled.div`
   //box-shadow: -5px 0px 5px 3px #D3D3D3;
 `;
 
-
 export const DetailedCardPhotoList = ({ photos }) => {
+    console.log("calling the photos here, should see the src next");
+
+    if (!photos){
+        return (<CardCol/>);
+    }
 
     let photoList = photos.map((src, i) => {
+        //console.log(src.replace('/images/', 'https://zillowprojs3.s3.us-east-2.amazonaws.com/'));
         return (
-            <div style={{
+            <div key={i} style={{
                 width: '400px',
                 height: '400px',
             }}>
                 <DetailedImage
-                    src={src}
+                    src={src.replace('/images/', 'https://zillowprojs3.s3.us-east-2.amazonaws.com/')}
                     key={i}
                 />
             </div>

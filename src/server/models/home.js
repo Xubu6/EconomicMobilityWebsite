@@ -9,7 +9,8 @@ let Home = new Schema({
     price: { type: String, required: true},
     bedrooms: { type: String, required: true },
     bathrooms: { type: String, required: true },
-    sqft: { type: String, required: true }
+    sqft: { type: String, required: true },
+    category: { type: String, required: true}
 });
 
 module.exports = mongoose.model("Home", Home);

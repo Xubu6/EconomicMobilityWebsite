@@ -60,8 +60,6 @@ export const HouseSearch = () => {
                 if (data.error)
                     return; // FIXME change to show an error message to the user
 
-                let text;
-                text = data.homes[0].address;
                 setHouses(data.homes);
             });
     };

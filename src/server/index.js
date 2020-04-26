@@ -1,4 +1,4 @@
-/* Copyright G. Hemingway, 2019 - All rights reserved */
+/* Copyright D. Ryan @2019 - All rights reserved */
 "use strict";
 
 const path = require("path");
@@ -16,10 +16,29 @@ const envConfig = require("simple-env-config");
 
 const env = process.env.NODE_ENV ? process.env.NODE_ENV : "dev";
 
+let certFileBuf;
+let options;
+
+if (env === "production") {
+    certFileBuf = fs.readFileSync('./rds-combined-ca-bundle.pem');
+    options = {
+        sslCA: certFileBuf
+    };
+}
+
 /**********************************************************************************************************/
 
 const setupServer = async () => {
     // Get the app config
+    //"mongodb": "mongodb://127.0.0.1:27017/zillow",
+    //"mongodb": "mongodb+srv://dtryan:z%4027nKfHHyFn_bM@cluster0-3xvei.mongodb.net/test?retryWrites=true&w=majority",
+
+    // 'mongodb://<sample-user>:<password>@sample-cluster.node.us-east-1.docdb.amazonaws.com:27017/sample-database?ssl=true&replicaSet=rs0&readPreference=secondaryPreferred',
+
+    let doc_db_url = "mongodb://ZillowProjUser:ZillowProjPass@zillow-docdb-cluster.cluster-cuusjgphml3x.us-east-2.docdb.amazonaws.com:27017";
+
+    // zillow-docdb-cluster.cluster-cuusjgphml3x.us-east-2.docdb.amazonaws.com:27017
+
     const conf = await envConfig("./config/config.json", env);
     const port = process.env.PORT ? process.env.PORT : conf.port;
 
@@ -31,26 +50,9 @@ const setupServer = async () => {
     app.use(express.static(path.join(__dirname, "../../public")));
     app.use(logger('dev'));
 
-    // let redis = require('redis');
-    // let client = redis.createClient(`6379`, `127.0.0.1`);
-    //
-    // client.on('ready', () => { 
-    //   console.log(`\tRedis Connected.`); 
-    // }).on(`error`, (err) => {
-    //   console.log(`Not able to connect to Redis.`); 
-    //   process.exit(-1); 
-    // });
-
-    // const redisOptions = {
-    //   host: "localhost",
-    //   port: 6379,
-    //   client: redis
-    // };
-
     // Setup pipeline session support
     app.use(session({
         name: "session",
-        //store: new RedisStore(redisOptions),
         secret: "wealthinequality",
         resave: false,
         saveUninitialized: true,
@@ -73,7 +75,7 @@ const setupServer = async () => {
         mongoose.set('useFindAndModify', false);
         mongoose.set('useCreateIndex', true);
         mongoose.set('useUnifiedTopology', true );
-        await mongoose.connect(conf.mongodb);
+        await mongoose.connect(conf.mongodb, options);
         console.log(`MongoDB connected: ${conf.mongodb}`);
     } catch (err) {
         console.log(err);
@@ -83,6 +85,8 @@ const setupServer = async () => {
     // Import our Data Models
     app.models = {
         Home: require("./models/home"),
+        Rating: require("./models/rating"),
+        Respondent: require("./models/respondent")
     };
 
     // Import our routes
@@ -90,16 +94,12 @@ const setupServer = async () => {
 
     // Give them the SPA base page
     app.get("*", (req, res) => {
-        const user = req.session.user;
-        console.log(`Loading app for: ${user ? user.username : "nobody!"}`);
-        let preloadedState = user
+        const respondent = req.session.respondent;
+        console.log(`Loading app for: ${respondent ? respondent.respondentId : "nobody!"}`);
+        let preloadedState = respondent
             ? {
-                username: user.username,
-                first_name: user.first_name,
-                last_name: user.last_name,
-                primary_email: user.primary_email,
-                city: user.city,
-                games: user.games
+                respondentId: respondent.respondentId,
+                experimentalGroup: respondent.experimentalGroup
             }
             : {};
         preloadedState = JSON.stringify(preloadedState).replace(/</g, "\\u003c");
@@ -118,7 +118,7 @@ const setupServer = async () => {
         };
         // Listen for HTTPS requests
         server = https.createServer(options, app).listen(port, () => {
-            console.log(`Secure Assignment 5 listening on: ${server.address().port}`);
+            console.log(`Secure Inequality Website listening on: ${server.address().port}`);
         });
         // Redirect HTTP to HTTPS
         http
@@ -130,11 +130,11 @@ const setupServer = async () => {
                 res.end();
             })
             .listen(80, () => {
-                console.log(`Assignment 5 listening on 80 for HTTPS redirect`);
+                console.log(`Inequality website listening on 80 for HTTPS redirect`);
             });
     } else {
         server = app.listen(port, () => {
-            console.log(`Assignment 5 ${env} listening on: ${server.address().port}`);
+            console.log(`Inequality Website ${env} listening on: ${server.address().port}`);
         });
     }
 };

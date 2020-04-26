@@ -1,4 +1,4 @@
-/* Copyright G. Hemingway, 2019 - All rights reserved */
+/* Copyright D. Ryan @2019 - All rights reserved */
 "use strict";
 
 import React from "react";
@@ -37,7 +37,7 @@ const customStyles = {
     }
 };
 
-export const HouseDetailsModal = ({show, handleClose, address, price, photos, bedrooms, bathrooms, sqft}) => {
+export const HouseDetailsModal = ({show, handleClose, _id, address, price, photos, bedrooms, bathrooms, sqft}) => {
 
     function openModal() {
         //setIsOpen(true);
@@ -53,6 +53,9 @@ export const HouseDetailsModal = ({show, handleClose, address, price, photos, be
         setIsOpen(false);
     }
 
+    console.log("photos within house details modal follows ");
+    //console.log(photos);
+
     return (
             <Modal
                 isOpen={show}
@@ -66,8 +69,8 @@ export const HouseDetailsModal = ({show, handleClose, address, price, photos, be
                     position: 'relative',
                     height: "80%",
                     width: "80%"
-                }} show={show}
-                    address={address} price={price} photos={photos} bedrooms={bedrooms} bathrooms={bathrooms} sqft={sqft}/>
+                }} show={show} _id={_id}
+                    address={address} price={price} photos={photos} bedrooms={bedrooms} bathrooms={bathrooms} sqft={sqft} handleClose={handleClose}/>
             </Modal>
     );
 };
