@@ -75,9 +75,12 @@ const setupServer = async () => {
     try {
         // Dont want to see MongooseJS deprecation warnings
         mongoose.set('useNewUrlParser', true);
+        mongoose.set('ssl', true);
+        mongoose.set('sslValidate', true);
+        mongoose.set('sslCA', certFileBuf);
         mongoose.set('useFindAndModify', false);
         mongoose.set('useCreateIndex', true);
-        mongoose.set('useUnifiedTopology', true );
+        mongoose.set('useUnifiedTopology', false );
         //await mongoose.connect(conf.mongodb);
         await mongoose.connect(doc_db_url, options);
         console.log(`MongoDB connected: ${conf.mongodb}`);
