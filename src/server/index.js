@@ -80,7 +80,7 @@ const setupServer = async () => {
         //mongoose.set('sslCA', certFileBuf);
         mongoose.set('useFindAndModify', false);
         mongoose.set('useCreateIndex', true);
-        mongoose.set('useUnifiedTopology', false );
+        mongoose.set('useUnifiedTopology', true );
         //await mongoose.connect(conf.mongodb);
         await mongoose.connect(doc_db_url, options);
         console.log(`MongoDB connected: ${conf.mongodb}`);
