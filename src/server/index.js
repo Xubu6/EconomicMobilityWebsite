@@ -19,7 +19,7 @@ const env = process.env.NODE_ENV ? process.env.NODE_ENV : "dev";
 let certFileBuf;
 let options;
 
-if (env === "production") {
+if (env === "dev") {
     certFileBuf = fs.readFileSync('./rds-combined-ca-bundle.pem');
     options = {
         sslCA: certFileBuf
@@ -75,7 +75,8 @@ const setupServer = async () => {
         mongoose.set('useFindAndModify', false);
         mongoose.set('useCreateIndex', true);
         mongoose.set('useUnifiedTopology', true );
-        await mongoose.connect(conf.mongodb, options);
+        //await mongoose.connect(conf.mongodb);
+        await mongoose.connect(doc_db_url, options);
         console.log(`MongoDB connected: ${conf.mongodb}`);
     } catch (err) {
         console.log(err);
