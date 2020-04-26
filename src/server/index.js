@@ -38,7 +38,7 @@ const setupServer = async () => {
 
     // mongodb://zillow-docdb-cluster.cluster-cuusjgphml3x.us-east-2.docdb.amazonaws.com:27017/?gssapiServiceName=mongodb
 
-    let doc_db_url = "mongodb://ZillowProjUser:ZillowProjPass@zillow-docdb-cluster.cluster-cuusjgphml3x.us-east-2.docdb.amazonaws.com:27017/?ssl-ca-certs=rds-combined-ca-bundle.pem";
+    let doc_db_url = "mongodb://ZillowProjUser:ZillowProjPass@zillow-docdb-cluster.cluster-cuusjgphml3x.us-east-2.docdb.amazonaws.com:27017/zillow?ssl-ca-certs=rds-combined-ca-bundle.pem";
 
     // zillow-docdb-cluster.cluster-cuusjgphml3x.us-east-2.docdb.amazonaws.com:27017
 
