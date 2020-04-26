@@ -24,6 +24,7 @@ if (env === "dev") {
     options = {
         sslCA: certFileBuf
     };
+    console.log("Cert file properly loaded");
 }
 
 /**********************************************************************************************************/
@@ -34,6 +35,8 @@ const setupServer = async () => {
     //"mongodb": "mongodb+srv://dtryan:z%4027nKfHHyFn_bM@cluster0-3xvei.mongodb.net/test?retryWrites=true&w=majority",
 
     // 'mongodb://<sample-user>:<password>@sample-cluster.node.us-east-1.docdb.amazonaws.com:27017/sample-database?ssl=true&replicaSet=rs0&readPreference=secondaryPreferred',
+
+    // mongodb://zillow-docdb-cluster.cluster-cuusjgphml3x.us-east-2.docdb.amazonaws.com:27017/?gssapiServiceName=mongodb
 
     let doc_db_url = "mongodb://ZillowProjUser:ZillowProjPass@zillow-docdb-cluster.cluster-cuusjgphml3x.us-east-2.docdb.amazonaws.com:27017";
 
