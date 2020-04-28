@@ -11,6 +11,11 @@ module.exports = app => {
     app.post("/v1/respondent", async (req, res) => {
         // FIXME check that the respondentId exists within the list of Ids???!!! or should I just accept it as right???
 
+        if (!req.body.respondentId.includes("danielryan")){
+            res.status(401).send();
+            return;
+        }
+
         // Generate grouping (4 groups)
         // 1 - ?
         // 2 - ?
