@@ -23,9 +23,9 @@ export const GoogleMapDisplay = ({ houses = ""}) => {
 
     if (houses !== ""){
 
-        console.log(`Marker should be at lat: ${home.lat} lng: ${home.lng}`);
         let i = 0;
         for (let home of houses){
+            console.log(`Marker should be at lat: ${home.lat} lng: ${home.lng}`);
             markers.push(
             <Marker
                 key={i}
