@@ -18,7 +18,7 @@ const GoogleMapBase = styled.div`
 const Marker = ({text}) => (<div style={{
         color: 'white',
         background: 'blue',
-        padding: '5px 5px',
+        padding: '2px 2px',
         display: 'inline-flex',
         textAlign: 'center',
         alignItems: 'center',
@@ -60,7 +60,7 @@ export const GoogleMapDisplay = ({ houses = ""}) => {
                 sqft={home.sqft}
                 lat={home.lat}
                 lng={home.lng}
-                text={home.address}
+                text={i}
             /> );
             i++;
         }
