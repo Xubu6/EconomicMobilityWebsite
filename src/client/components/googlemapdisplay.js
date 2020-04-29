@@ -15,7 +15,7 @@ const GoogleMapBase = styled.div`
   height: 100%
 `;
 
-const Marker = () => (<></>);
+const Marker = ({text}) => (<div>{text}</div>);
 
 export const GoogleMapDisplay = ({ houses = ""}) => {
 
@@ -37,6 +37,7 @@ export const GoogleMapDisplay = ({ houses = ""}) => {
                 sqft={home.sqft}
                 lat={home.lat}
                 lng={home.lng}
+                text={home.address}
             /> );
             i++;
         }
