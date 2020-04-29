@@ -70,7 +70,7 @@ export const HouseSearch = () => {
             <button onClick={onSubmit}>Search</button>
         </SearchBar>
         <ContentRow>
-            <GoogleMapDisplay house={houses}/>
+            <GoogleMapDisplay house={houses ? houses : ""}/>
             <HouseCardList style={{width: "40%", alignSelf: 'flex-end'}} houses={houses}/>
         </ContentRow>
     </LandingBase>);

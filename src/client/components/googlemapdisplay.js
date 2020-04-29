@@ -39,6 +39,8 @@ export const GoogleMapDisplay = ({ houses = ""}) => {
                 lng={houseInfo.lng}
             /> );
         }
+    } else {
+        console.log("The houses for google map markers are empty");
     }
 
     let center = {
