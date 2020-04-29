@@ -10,7 +10,16 @@ let Home = new Schema({
     bedrooms: { type: String, required: true },
     bathrooms: { type: String, required: true },
     sqft: { type: String, required: true },
-    category: { type: String, required: true}
+    category: { type: String, required: true},
+    lat: {type: Number, required: true},
+    lng: {type: Number, required: true}
+});
+
+Home.pre("save", function(next) {
+    // Sanitize strings
+    this.address = this.address.replace(/<(?:.|\n)*?>/gm, "");
+    this.category = this.category.replace(/<(?:.|\n)*?>/gm, "");
+    next();
 });
 
 module.exports = mongoose.model("Home", Home);
