@@ -11,6 +11,13 @@ module.exports = app => {
     app.post("/v1/respondent", async (req, res) => {
         // FIXME check that the respondentId exists within the list of Ids???!!! or should I just accept it as right???
 
+        if (!(req.body.respondentId.includes("danielryan") || req.body.respondentId.includes("eunjikim")))
+        {
+            console.log(`Not authorized: ${err}`);
+            res.status(401).send({error: "Unauthorized respondentId"});
+            return;
+        }
+
         let respondent = await app.models.Respondent.findOne({
             respondentId: req.body.respondentId.toLowerCase()
         });
