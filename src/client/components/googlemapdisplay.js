@@ -15,16 +15,38 @@ const GoogleMapBase = styled.div`
   height: 100%
 `;
 
-const Marker = ({text}) => (<div>{text}</div>);
+const Marker = ({text}) => (<div> style={{
+        color: 'white',
+        background: 'blue',
+        padding: '5px 5px',
+        display: 'inline-flex',
+        textAlign: 'center',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: '100%',
+        transform: 'translate(-50%, -50%)'
+}}>
+{text}
+</div>);
 
 export const GoogleMapDisplay = ({ houses = ""}) => {
 
     let markers = [];
 
+    let center = {
+        lat: 29.187,
+        lng: -82.14
+    };
+
     if (houses !== ""){
 
         let i = 0;
         for (let home of houses){
+
+            if (i === 0){
+                center.lat = home.lat;
+                center.lng = home.lng;
+            }
             console.log(`Marker should be at lat: ${home.lat} lng: ${home.lng}`);
             markers.push(
             <Marker
@@ -44,11 +66,6 @@ export const GoogleMapDisplay = ({ houses = ""}) => {
     } else {
         console.log("The houses for google map markers are empty");
     }
-
-    let center = {
-        lat: 29.187,
-        lng: -82.14
-    };
 
     return (
         <GoogleMapBase>
