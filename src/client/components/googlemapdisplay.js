@@ -23,6 +23,8 @@ export const GoogleMapDisplay = ({ houses = ""}) => {
 
     if (houses !== ""){
 
+        console.log(`Marker should be at lat: ${houseInfo.lat} lng: ${houseInfo.lng}`);
+
         for (let home of houses){
             markers.push(
             <Marker
