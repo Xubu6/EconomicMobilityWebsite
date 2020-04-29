@@ -24,20 +24,21 @@ export const GoogleMapDisplay = ({ houses = ""}) => {
     if (houses !== ""){
 
         console.log(`Marker should be at lat: ${houseInfo.lat} lng: ${houseInfo.lng}`);
-
+        let i = 0;
         for (let home of houses){
             markers.push(
             <Marker
                 key={i}
-                address={houseInfo.address}
-                price={houseInfo.price}
-                photos={houseInfo.photos}
-                bedrooms={houseInfo.bedrooms}
-                bathrooms={houseInfo.bathrooms}
-                sqft={houseInfo.sqft}
-                lat={houseInfo.lat}
-                lng={houseInfo.lng}
+                address={home.address}
+                price={home.price}
+                photos={home.photos}
+                bedrooms={home.bedrooms}
+                bathrooms={home.bathrooms}
+                sqft={home.sqft}
+                lat={home.lat}
+                lng={home.lng}
             /> );
+            i++;
         }
     } else {
         console.log("The houses for google map markers are empty");
