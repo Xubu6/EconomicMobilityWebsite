@@ -15,7 +15,7 @@ const GoogleMapBase = styled.div`
   height: 100%
 `;
 
-const Marker = ({text}) => (<div> style={{
+const Marker = ({text}) => (<div style={{
         color: 'white',
         background: 'blue',
         padding: '5px 5px',
@@ -25,9 +25,10 @@ const Marker = ({text}) => (<div> style={{
         justifyContent: 'center',
         borderRadius: '100%',
         transform: 'translate(-50%, -50%)'
-}}>
-{text}
-</div>);
+    }}>
+    {text}
+    </div>
+);
 
 export const GoogleMapDisplay = ({ houses = ""}) => {
 
