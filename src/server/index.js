@@ -24,7 +24,6 @@ if (env === "dev") {
     options = {
         sslCA: certFileBuf
     };
-    console.log("Cert file properly loaded");
 }
 
 /**********************************************************************************************************/
@@ -38,7 +37,7 @@ const setupServer = async () => {
 
     // mongodb://zillow-docdb-cluster.cluster-cuusjgphml3x.us-east-2.docdb.amazonaws.com:27017/?gssapiServiceName=mongodb
 
-    let doc_db_url = "mongodb://ZillowProjUser:ZillowProjPass@zillow-docdb-cluster.cuusjgphml3x.us-east-2.docdb.amazonaws.com:27017/?ssl=true&ssl_ca_certs=rds-combined-ca-bundle.pem&retryWrites=false";
+    let doc_db_url = "mongodb://ZillowProjUser:ZillowProjPass@zillow-docdb-cluster.cuusjgphml3x.us-east-2.docdb.amazonaws.com:27017/zillow?ssl=true&ssl_ca_certs=rds-combined-ca-bundle.pem&retryWrites=false";
 
     // zillow-docdb-cluster.cluster-cuusjgphml3x.us-east-2.docdb.amazonaws.com:27017
 
@@ -81,8 +80,8 @@ const setupServer = async () => {
         mongoose.set('useFindAndModify', false);
         mongoose.set('useCreateIndex', true);
         mongoose.set('useUnifiedTopology', true );
-        //await mongoose.connect(conf.mongodb);
-        await mongoose.connect(doc_db_url, options);
+        await mongoose.connect(conf.mongodb, options);
+        //await mongoose.connect(doc_db_url, options);
         console.log(`MongoDB connected: ${conf.mongodb}`);
     } catch (err) {
         console.log(err);

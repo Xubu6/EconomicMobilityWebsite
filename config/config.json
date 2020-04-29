@@ -1,7 +1,8 @@
 {
   "url": "http://localhost",
   "api_version": "/v1",
-  "mongodb": "mongodb://127.0.0.1:27017/zillow",
+  "mongodbLocal": "mongodb://127.0.0.1:27017/zillow",
+  "mongodb": "mongodb://ZillowProjUser:ZillowProjPass@zillow-docdb-cluster.cuusjgphml3x.us-east-2.docdb.amazonaws.com:27017/zillow?ssl=true&ssl_ca_certs=rds-combined-ca-bundle.pem&retryWrites=false",
   "port": 8080,
   "environments" : {
     "test": {
