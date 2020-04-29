@@ -19,9 +19,12 @@ const Marker = () => (<></>);
 
 export const GoogleMapDisplay = ({ houses = ""}) => {
 
+    let markers = [];
 
-    const markers = houses === "" ? {} : houses.map((houseInfo, i) => {
-        return (
+    if (houses !== ""){
+
+        for (let home of houses){
+            markers.push(
             <Marker
                 key={i}
                 address={houseInfo.address}
@@ -32,15 +35,14 @@ export const GoogleMapDisplay = ({ houses = ""}) => {
                 sqft={houseInfo.sqft}
                 lat={houseInfo.lat}
                 lng={houseInfo.lng}
-            />
-        );
-    });
+            /> );
+        }
+    }
 
     let center = {
         lat: 29.187,
         lng: -82.14
     };
-
 
     return (
         <GoogleMapBase>
