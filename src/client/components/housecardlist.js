@@ -64,14 +64,14 @@ let HomeDetails = ({bedrooms, bathrooms, sqft, price}) => {
     );
 };
 
-export const HouseCard = ({ _id, address, price, photos, bedrooms, bathrooms, sqft, onClick}) => {
+export const HouseCard = ({ _id, address, price, photos, bedrooms, bathrooms, sqft, category, lat, lng, onClick}) => {
     return ((photos[0]) ? (<CardBase>
         <PrincipalImg src={`${photos[0].replace('/images/', 'https://zillowprojs3.s3.us-east-2.amazonaws.com/')}`}
-                      onClick={() => onClick(_id, address, price, photos, bedrooms, bathrooms, sqft)}/>
+                      onClick={() => onClick(_id, address, price, photos, bedrooms, bathrooms, sqft, category, lat, lng)}/>
         <HomeDetails bedrooms={bedrooms} bathrooms={bathrooms} sqft={sqft} price={price}
-                     onClick={() => onClick(_id, address, price, photos, bedrooms, bathrooms, sqft)}/>
+                     onClick={() => onClick(_id, address, price, photos, bedrooms, bathrooms, sqft, category, lat, lng)}/>
         <AddressDetails
-            onClick={() => onClick(_id, address, price, photos, bedrooms, bathrooms, sqft)}
+            onClick={() => onClick(_id, address, price, photos, bedrooms, bathrooms, sqft, category, lat, lng)}
         >{address.replace(/-/g, ' ')}</AddressDetails>
     </CardBase>) : (<div></div>));
 };
@@ -117,7 +117,7 @@ export const HouseCardList = ({houses}) => {
         setTargetHouse(null);
         setShow(false);
     };
-    const handleShow = (_id, address, price, photos, bedrooms, bathrooms, sqft) => {
+    const handleShow = (_id, address, price, photos, bedrooms, bathrooms, sqft, category, lat, lng) => {
         console.log(`Show house modal`);
         setTargetHouse({
             _id: _id,
@@ -126,7 +126,10 @@ export const HouseCardList = ({houses}) => {
             photos: photos,
             bedrooms: bedrooms,
             bathrooms: bathrooms,
-            sqft: sqft
+            sqft: sqft,
+            category: category,
+            lat: lat,
+            lng: lng
         });
         setShow(true);
     };
@@ -143,6 +146,9 @@ export const HouseCardList = ({houses}) => {
                 bedrooms={houseInfo.bedrooms}
                 bathrooms={houseInfo.bathrooms}
                 sqft={houseInfo.sqft}
+                category={houseInfo.category}
+                lat={houseInfo.lat}
+                lng={houseInfo.lng}
                 onClick={handleShow}
             />
         );

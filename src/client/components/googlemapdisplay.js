@@ -15,21 +15,25 @@ const GoogleMapBase = styled.div`
   height: 100%
 `;
 
-export const GoogleMapDisplay = ({ houses = "", email = "" }) => {
+const Marker = () => (<></>);
 
-    // const children = houses.map((houseInfo, i) => {
-    //     return (
-    //         <HouseCard
-    //             key={i}
-    //             address={houseInfo.address}
-    //             price={houseInfo.price}
-    //             photos={houseInfo.photos}
-    //             bedrooms={houseInfo.bedrooms}
-    //             bathrooms={houseInfo.bathrooms}
-    //             sqft={houseInfo.sqft}
-    //         />
-    //     );
-    // });
+export const GoogleMapDisplay = ({ houses = ""}) => {
+
+    const markers = houses.map((houseInfo, i) => {
+        return (
+            <Marker
+                key={i}
+                address={houseInfo.address}
+                price={houseInfo.price}
+                photos={houseInfo.photos}
+                bedrooms={houseInfo.bedrooms}
+                bathrooms={houseInfo.bathrooms}
+                sqft={houseInfo.sqft}
+                lat={houseInfo.lat}
+                lng={houseInfo.lng}
+            />
+        );
+    });
 
     let center = {
         lat: 29.187,
@@ -44,6 +48,7 @@ export const GoogleMapDisplay = ({ houses = "", email = "" }) => {
                 center={center}
                 defaultZoom={6}
             >
+                {markers}
             </GoogleMapReact>
         </GoogleMapBase>
     );

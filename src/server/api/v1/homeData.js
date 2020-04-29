@@ -90,7 +90,10 @@ module.exports = app => {
                         price: home.price,
                         bedrooms: home.bedrooms,
                         bathrooms: home.bathrooms,
-                        sqft: home.sqft
+                        sqft: home.sqft,
+                        category: home.category,
+                        lat: home.lat,
+                        lng: home.lng
                     }
                 });
 
