@@ -12,7 +12,7 @@ module.exports = app => {
         // FIXME check that the respondentId exists within the list of Ids???!!! or should I just accept it as right???
 
         let respondent = await app.models.Respondent.findOne({
-            respondentId: req.params.respondentId.toLowerCase()
+            respondentId: req.body.respondentId.toLowerCase()
         });
 
         if (respondent){
