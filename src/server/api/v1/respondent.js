@@ -13,7 +13,7 @@ module.exports = app => {
 
         if (!(req.body.respondentId.includes("danielryan") || req.body.respondentId.includes("eunjikim")))
         {
-            console.log(`Not authorized: ${err}`);
+            console.log(`Not authorized: ${req.body.respondentId}`);
             res.status(401).send({error: "Unauthorized respondentId"});
             return;
         }
