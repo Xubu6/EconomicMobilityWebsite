@@ -73,7 +73,7 @@ export const GoogleMapDisplay = ({ houses = ""}) => {
             <GoogleMapReact
                 bootstrapURLKeys={{ key: "AIzaSyDL_A5wQnUSyio3otmRzu3N5yl9-eaQyZY" }}
                 center={center}
-                defaultZoom={6}
+                defaultZoom={9}
             >
                 {markers}
             </GoogleMapReact>
