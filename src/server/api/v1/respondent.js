@@ -11,8 +11,27 @@ module.exports = app => {
     app.post("/v1/respondent", async (req, res) => {
         // FIXME check that the respondentId exists within the list of Ids???!!! or should I just accept it as right???
 
-        if (!req.body.respondentId.includes("danielryan")){
-            res.status(401).send();
+        let respondent = await app.models.Respondent.findOne({
+            respondentId: req.params.respondentId.toLowerCase()
+        });
+
+        if (respondent){
+            // Log the respondent in
+            await req.session.regenerate(() => {
+                // Set the session information
+                req.session.respondent = {
+                    respondentId: respondent.respondentId,
+                    experimentalGroup: respondent.experimentalGroup,
+                    _id: respondent._id
+                };
+                console.log(`Respondent.login success: ${req.session.respondent._id}`);
+
+                // Return the respondent Info
+                res.status(200).send({
+                    respondentId: respondent.respondentId,
+                    experimentalGroup: respondent.experimentalGroup
+                });
+            });
             return;
         }
 
@@ -49,7 +68,7 @@ module.exports = app => {
                             experimentalGroup: respondentData.experimentalGroup,
                             _id: respondent._id
                         };
-                        console.log(`Respondent.login success: ${req.session.respondent._id}`);
+                        console.log(`Respondent.creation success: ${req.session.respondent._id}`);
 
                         // Return the respondent Info
                         res.status(201).send({
