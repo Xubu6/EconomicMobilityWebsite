@@ -19,7 +19,8 @@ const Marker = () => (<></>);
 
 export const GoogleMapDisplay = ({ houses = ""}) => {
 
-    const markers = houses.map((houseInfo, i) => {
+
+    const markers = houses === "" ? {} : houses.map((houseInfo, i) => {
         return (
             <Marker
                 key={i}
