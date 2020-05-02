@@ -1,9 +1,7 @@
 import React, { Fragment } from "react";
 import GoogleMapReact from "google-map-react";
-import PropTypes from "prop-types";
+import { fitBounds } from 'google-map-react/utils';
 import styled from "styled-components";
-import { Link } from "react-router-dom";
-import {HouseCard} from "./housecardlist";
 
 /*******************************************************************/
 
@@ -73,7 +71,7 @@ export const GoogleMapDisplay = ({ houses = ""}) => {
             <GoogleMapReact
                 bootstrapURLKeys={{ key: "AIzaSyDL_A5wQnUSyio3otmRzu3N5yl9-eaQyZY" }}
                 center={center}
-                defaultZoom={9}
+                defaultZoom={ 12 }
             >
                 {markers}
             </GoogleMapReact>
