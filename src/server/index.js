@@ -34,16 +34,20 @@ const setupServer = async () => {
     const conf = await envConfig("./config/config.json", env);
     const port = process.env.PORT ? process.env.PORT : conf.port;
 
+    let certFileBuf;
+    let options;
+
+
+
     if (env !== "dev") {
         console.log("cert file loaded");
         certFileBuf = fs.readFileSync('./rds-combined-ca-bundle.pem');
         options = {
             sslCA: certFileBuf
         };
+    } else {
+        console.log("env is dev");
     }
-
-    let certFileBuf;
-    let options;
 
 
     // Setup our Express pipeline
