@@ -114,7 +114,7 @@ const setupServer = async () => {
     app.get("*", (req, res) => {
 
         console.log(`Path is ${req.path}`);
-        if (!(req.path === '/' || req.path.includes("/v1/"))){
+        if (!(req.path === '/' || req.path.includes("/v1/") || req.path === "/favicon.ico" || req.path.includes("/fonts/"))){
             return res.status(401).send();
         }
         const respondent = req.session.respondent;
