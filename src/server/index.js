@@ -86,7 +86,7 @@ const setupServer = async () => {
         mongoose.set('useFindAndModify', false);
         mongoose.set('useCreateIndex', true);
         mongoose.set('useUnifiedTopology', true );
-        const mongoUrl = (env === "dev") ? conf.mongodb : conf.mongodb;
+        const mongoUrl = (env === "dev") ? conf.mongodbLocal : conf.mongodb;
         
         await mongoose.connect(mongoUrl, options);
         
@@ -112,6 +112,11 @@ const setupServer = async () => {
 
     // Give them the SPA base page
     app.get("*", (req, res) => {
+
+        console.log(`Path is ${req.path}`);
+        if (!(req.path === '/' || req.path.includes("/v1/"))){
+            return res.status(401).send();
+        }
         const respondent = req.session.respondent;
         console.log(`Loading app for: ${respondent ? respondent.respondentId : "nobody!"}`);
         let preloadedState = respondent
