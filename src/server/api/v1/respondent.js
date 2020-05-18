@@ -11,7 +11,13 @@ module.exports = app => {
     app.post("/v1/respondent", async (req, res) => {
         // FIXME check that the respondentId exists within the list of Ids???!!! or should I just accept it as right???
 
-        if (!(req.body.respondentId.includes("danielryan") || req.body.respondentId.includes("eunjikim")))
+        if (!(req.body.respondentId.includes("danielryan")
+            || req.body.respondentId.includes("eunjikim")
+            || req.body.respondentId.includes("sarakirshbuam")
+            || req.body.respondentId.includes("jamestang")
+            || req.body.respondentId.includes("ancherli")
+            || req.body.respondentId.includes("thomasmallick")
+        ))
         {
             console.log(`Not authorized: ${req.body.respondentId}`);
             res.status(401).send({error: "Unauthorized respondentId"});
@@ -59,7 +65,7 @@ module.exports = app => {
             };
 
             try {
-                // FIXME is this gonna be new or checking that one already exists
+                // create new respondent
                 let respondent = new app.models.Respondent(respondentData);
 
                 // Save it now yes

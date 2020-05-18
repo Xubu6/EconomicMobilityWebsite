@@ -18,9 +18,19 @@ module.exports = app => {
 
             let home = true;
 
+            // update object that will edit the mongoObject
+            let update = {};
+
+            // dynamic fieldName, unique to each RA
+            let fieldName = req.session.respondent.respondentId + "Category";
+
+            // setting the dynamic field to that category rating
+            update[fieldName] = req.body.category;
+
+            // Atomic (i think) operation that sets enacts the update
             await app.models.Home.findByIdAndUpdate(
                 { _id: req.body._id},
-                { category: req.body.category},
+                update,
                 { new: true},
                 (err, result) => {
                     if (err){
@@ -32,16 +42,26 @@ module.exports = app => {
                 });
 
             if (home){
+
+                // send success
+                console.log(`${req.body.address} rated by ${req.session.respondent.respondentId} as ${req.body.category}`)
                 res.status(200).send({
                     "address": req.body.address,
                     _id: req.body._id,
                     "category": req.body.category
                 });
+
             } else {
+
+                console.log(`Rating failure for ${req.body.address} by ${req.session.respondent.respondentId}`)
                 res.status(400).send();
+
             }
         } else {
+
+            console.log(`No user logged in, suspicious activity`);
             res.status(401).send();
+
         }
 
 
@@ -72,15 +92,16 @@ module.exports = app => {
      * @return {200, {username, primary_email, first_name, last_name, city, games[...]}}
      */
     app.get("/v1/homeData/:zipcode", async (req, res) => {
-        console.log(`Getting homes from ${req.params.zipcode}`);
 
         if (req.session.respondent) {
             let homes = await app.models.Home.find({
                 zip: req.params.zipcode.toLowerCase()
             });
 
-            if (!homes)
-                res.status(404).send({error: `unknown zipcode: ${req.params.username}`});
+            if (!homes) {
+                console.log(`Unknown zipcode error for ${req.sesssion.respondent.respondentId} requesting ${req.params.zipcode}`);
+                res.status(404).send({error: `unknown zipcode: ${req.sesssion.respondent.respondentId}`});
+            }
             else {
                 const filteredHomes = homes.map(home => {
                     return {
@@ -99,11 +120,13 @@ module.exports = app => {
 
                 // FIXME This is where we will do the data priming to show inequality.. figure out specifics from eunji
 
+                console.log(`Send ${filteredHomes.length} homes for ${req.params.zipcode} to ${req.session.respondent.respondentId}`)
                 res.status(200).send({
                     homes: filteredHomes
                 });
             }
         } else {
+            console.log(`No user logged in, suspicious activity`);
             res.status(401).send();
         }
     });

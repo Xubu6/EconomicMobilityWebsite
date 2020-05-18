@@ -29,13 +29,16 @@ export const DetailedCardPhotoList = ({ photos }) => {
         return (<CardCol/>);
     }
 
+    // src={src.replace('/images/', 'https://zillowprojs3.s3.us-east-2.amazonaws.com/')}
+
     let photoList = photos.map((src, i) => {
         //console.log(src.replace('/images/', 'https://zillowprojs3.s3.us-east-2.amazonaws.com/'));
+        let url = src;
         return (
             <div key={i} style={{
                 width: '400px',
                 height: '400px',
-            }}>
+            }} >
                 <DetailedImage
                     src={src.replace('/images/', 'https://zillowprojs3.s3.us-east-2.amazonaws.com/')}
                     key={i}

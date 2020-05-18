@@ -19,7 +19,7 @@ const env = process.env.NODE_ENV ? process.env.NODE_ENV : "dev";
 let certFileBuf;
 let options;
 
-if (env === "dev") {
+if (env != "dev") {
     certFileBuf = fs.readFileSync('./rds-combined-ca-bundle.pem');
     options = {
         sslCA: certFileBuf
@@ -50,7 +50,7 @@ const setupServer = async () => {
     app.engine("pug", require("pug").__express);
     app.set("views", __dirname);
     app.use(express.static(path.join(__dirname, "../../public")));
-    app.use(logger('dev'));
+    //app.use(logger('dev'));
 
     // Setup pipeline session support
     app.use(session({
@@ -80,9 +80,12 @@ const setupServer = async () => {
         mongoose.set('useFindAndModify', false);
         mongoose.set('useCreateIndex', true);
         mongoose.set('useUnifiedTopology', true );
-        await mongoose.connect(conf.mongodb, options);
+        const mongoUrl = (env === "dev") ? conf.mongodbLocal : conf.mongodb;
+        
+        await mongoose.connect(mongoUrl, options);
+        
         //await mongoose.connect(doc_db_url, options);
-        console.log(`MongoDB connected: ${conf.mongodb}`);
+        console.log(`MongoDB connected: ${mongoUrl}`);
     } catch (err) {
         console.log(err);
         process.exit(-1);
@@ -94,6 +97,9 @@ const setupServer = async () => {
         Rating: require("./models/rating"),
         Respondent: require("./models/respondent")
     };
+
+    // Setting the app to know that it is behind a local proxy, this sets the remote address to the req address
+    app.set('trust proxy', '127.0.0.1');
 
     // Import our routes
     require("./api")(app);

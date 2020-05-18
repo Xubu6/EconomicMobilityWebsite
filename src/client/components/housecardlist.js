@@ -65,6 +65,8 @@ let HomeDetails = ({bedrooms, bathrooms, sqft, price}) => {
 };
 
 export const HouseCard = ({ _id, address, price, photos, bedrooms, bathrooms, sqft, category, lat, lng, onClick}) => {
+// src={`${photos[0].replace('/images/', 'https://zillowprojs3.s3.us-east-2.amazonaws.com/')}`}
+
     return ((photos[0]) ? (<CardBase>
         <PrincipalImg src={`${photos[0].replace('/images/', 'https://zillowprojs3.s3.us-east-2.amazonaws.com/')}`}
                       onClick={() => onClick(_id, address, price, photos, bedrooms, bathrooms, sqft, category, lat, lng)}/>
@@ -106,19 +108,14 @@ const HouseModalStyle = {
     width: "80%"
 };
 
-export const HouseCardList = ({houses}) => {
+export const HouseCardList = ({houses, show, setShow, targetHouse, setTargetHouse}) => {
     //console.log(houses);
 
-    const [show, setShow] = useState(false);
-    const [targetHouse, setTargetHouse] = useState(null);
-
     const handleClose = () => {
-        console.log("Don't show house modal");
         setTargetHouse(null);
         setShow(false);
     };
     const handleShow = (_id, address, price, photos, bedrooms, bathrooms, sqft, category, lat, lng) => {
-        console.log(`Show house modal`);
         setTargetHouse({
             _id: _id,
             address: address,
@@ -134,7 +131,7 @@ export const HouseCardList = ({houses}) => {
         setShow(true);
     };
 
-    const children = houses.map((houseInfo, i) => {
+    const children = houses ? (houses.map((houseInfo, i) => {
 
         return (
             <HouseCard
@@ -152,7 +149,7 @@ export const HouseCardList = ({houses}) => {
                 onClick={handleShow}
             />
         );
-    });
+    })) : <div/>;
     return (
         <CardCol>
             {children}

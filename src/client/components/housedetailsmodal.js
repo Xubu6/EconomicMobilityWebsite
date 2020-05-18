@@ -53,7 +53,6 @@ export const HouseDetailsModal = ({show, handleClose, _id, address, price, photo
         setIsOpen(false);
     }
 
-    console.log("photos within house details modal follows ");
     //console.log(photos);
 
     return (

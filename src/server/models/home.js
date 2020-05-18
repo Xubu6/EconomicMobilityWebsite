@@ -1,6 +1,15 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
+/*
+req.body.respondentId.includes("danielryan")
+            || req.body.respondentId.includes("eunjikim")
+            || req.body.respondentId.includes("sarakirshbuam")
+            || req.body.respondentId.includes("jamestang")
+            || req.body.respondentId.includes("ancherli")
+            || req.body.respondentId.includes("thomasmallick")
+ */
+
 let Home = new Schema({
     zip: { type: Number, required: true },
     address: { type: String, required: true, index: { unique: true } },
@@ -10,7 +19,12 @@ let Home = new Schema({
     bedrooms: { type: String, required: true },
     bathrooms: { type: String, required: true },
     sqft: { type: String, required: true },
-    category: { type: String, required: true},
+    danielryanCategory: { type: String, required: true},
+    eunjikimCategory: { type: String, required: true},
+    sarakirshbuamCategory: { type: String, required: true},
+    jamestangCategory: { type: String, required: true},
+    ancherliCategory: { type: String, required: true},
+    thomasmallickCategory: { type: String, required: true},
     lat: {type: Number, required: true},
     lng: {type: Number, required: true}
 });

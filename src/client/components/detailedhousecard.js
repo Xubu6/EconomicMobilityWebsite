@@ -69,38 +69,48 @@ let DetailedPhotosList = styled.div`
 
 let DetailedHomeDetails = ({_id, address, bedrooms, bathrooms, sqft, price, handleClose}) => {
 
-    const [rating1, setRating1] = useState(0);
-    const [rating2, setRating2] = useState(0);
-    const [rating3, setRating3] = useState(0);
+    // const [rating1, setRating1] = useState(0);
+    // const [rating2, setRating2] = useState(0);
+    // const [rating3, setRating3] = useState(0);
 
-    let submitRatings = () => {
-        // implement rating submission logic here
-        console.log(`Verify {${rating1}, ${rating2}, ${rating3}} and submit them`);
+    // let submitRatings = () => {
+    //     // implement rating submission logic here
+    //     console.log(`Verify {${rating1}, ${rating2}, ${rating3}} and submit them`);
+    //
+    //     fetch("/v1/rating", {
+    //         body: JSON.stringify({
+    //             _id: _id,
+    //             address: address,
+    //             rating1: rating1,
+    //             rating2: rating2,
+    //             rating3: rating3
+    //         }),
+    //         method: "POST",
+    //         credentials: "include",
+    //         headers: {
+    //             "content-type": "application/json"
+    //         }
+    //     }).then(res => {
+    //         res.json().then(data => {
+    //             if (res.ok) {
+    //                 console.log(`Saved rating with ${data.address}`);
+    //             } else {
+    //                 Console.log(`Rating error for address: ${data.address}`);
+    //             }
+    //         });
+    //     });
+    //     handleClose();
+    // };
 
-        fetch("/v1/rating", {
-            body: JSON.stringify({
-                _id: _id,
-                address: address,
-                rating1: rating1,
-                rating2: rating2,
-                rating3: rating3
-            }),
-            method: "POST",
-            credentials: "include",
-            headers: {
-                "content-type": "application/json"
-            }
-        }).then(res => {
-            res.json().then(data => {
-                if (res.ok) {
-                    console.log(`Saved rating with ${data.address}`);
-                } else {
-                    Console.log(`Rating error for address: ${data.address}`);
-                }
-            });
-        });
-        handleClose();
-    };
+    /*
+                <MyRating rating={rating1} setRating={setRating1} displayName={"Cleanliness"}/>
+            <MyRating rating={rating2} setRating={setRating2} displayName={"Curb Appeal"}/>
+            <MyRating rating={rating3} setRating={setRating3} displayName={"Livability"}/>
+
+            <div style={{width: "100%", textAlign: "center"}}>
+                <Button variant={"primary"} style={{width: "20%", textAlign: "center"}} size={"sm"} onClick={submitRatings}>Submit Ratings</Button>
+            </div>
+    */
 
     return (
         <CardDetails>
@@ -111,12 +121,6 @@ let DetailedHomeDetails = ({_id, address, bedrooms, bathrooms, sqft, price, hand
                 {/*<HomeInfoStyle placement={'right'}>{bathrooms} bath </HomeInfoStyle>*/}
                 {/*<HomeInfoStyle placement={'right'}>{sqft} sqft </HomeInfoStyle>*/}
             </HomeDetailsStyle>
-            <MyRating rating={rating1} setRating={setRating1} displayName={"Cleanliness"}/>
-            <MyRating rating={rating2} setRating={setRating2} displayName={"Curb Appeal"}/>
-            <MyRating rating={rating3} setRating={setRating3} displayName={"Livability"}/>
-            <div style={{width: "100%", textAlign: "center"}}>
-                <Button variant={"primary"} style={{width: "20%", textAlign: "center"}} size={"sm"} onClick={submitRatings}>Submit Ratings</Button>
-            </div>
             <br/>
             <br/>
             <Classification handleClose={handleClose} _id={_id} address={address} />

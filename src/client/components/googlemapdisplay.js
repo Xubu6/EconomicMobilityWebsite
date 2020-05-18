@@ -2,6 +2,7 @@ import React, { Fragment } from "react";
 import GoogleMapReact from "google-map-react";
 import { fitBounds } from 'google-map-react/utils';
 import styled from "styled-components";
+import CustomMarker from "./custommarker";
 
 /*******************************************************************/
 
@@ -13,65 +14,103 @@ const GoogleMapBase = styled.div`
   height: 100%
 `;
 
-const Marker = ({text}) => (<div style={{
-        color: 'white',
-        background: 'blue',
-        padding: '2px 2px',
-        display: 'inline-flex',
-        textAlign: 'center',
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderRadius: '100%',
-        transform: 'translate(-50%, -50%)'
-    }}>
-    {text}
-    </div>
-);
-
-export const GoogleMapDisplay = ({ houses = ""}) => {
+export const GoogleMapDisplay = ({ houses = "", setShow, setTargetHouse}) => {
 
     let markers = [];
 
-    let center = {
-        lat: 29.187,
-        lng: -82.14
-    };
+    let center = {};
 
-    if (houses !== ""){
+    let nwLat;
+    let nwLng;
+    let seLat;
+    let seLng;
+
+    console.log(`Houses to be displayed within maps are : ${houses}`);
+
+    if (houses === ""){
+        console.log("Houses equal to empty string");
+    }
+
+    if (houses === []){
+        console.log("Houses equal to empty array");
+    }
+
+    if (!houses){
+        console.log("Houses in null or undefined");
+    }
+
+    if (houses){
+
+        nwLat = houses[0].lat;
+        nwLng = houses[0].lng;
+        seLat = houses[0].lat;
+        seLng = houses[0].lng;
 
         let i = 0;
         for (let home of houses){
+
+            if (!home)
+                continue;
 
             if (i === 0){
                 center.lat = home.lat;
                 center.lng = home.lng;
             }
-            console.log(`Marker should be at lat: ${home.lat} lng: ${home.lng}`);
-            markers.push(
-            <Marker
-                key={i}
-                address={home.address}
-                price={home.price}
-                photos={home.photos}
-                bedrooms={home.bedrooms}
-                bathrooms={home.bathrooms}
-                sqft={home.sqft}
-                lat={home.lat}
-                lng={home.lng}
-                text={i}
-            /> );
-            i++;
+
+            nwLat = Math.max(nwLat, home.lat);
+            nwLng = Math.max(nwLng, home.lng);
+            seLat = Math.min(seLat, home.lat);
+            seLng = Math.min(seLng, home.lng);
+
+            if (home.photos[0]) {
+                console.log(`Marker should be at lat: ${home.lat} lng: ${home.lng}`);
+                markers.push(
+                    <CustomMarker
+                        key={i}
+                        _id={home._id}
+                        address={home.address}
+                        price={home.price}
+                        photos={home.photos}
+                        bedrooms={home.bedrooms}
+                        bathrooms={home.bathrooms}
+                        sqft={home.sqft}
+                        lat={home.lat}
+                        lng={home.lng}
+                        setShow={setShow}
+                        setTargetHouse={setTargetHouse}
+                        text={i}
+                    /> );
+                i++;
+            }
         }
-    } else {
-        console.log("The houses for google map markers are empty");
     }
+
+    console.log(`nwLat : ${nwLat}`);
+    console.log(`nwLng : ${nwLng}`);
+    console.log(`seLat : ${seLat}`);
+    console.log(`seLng : ${seLng}`);
+
+    const fit = fitBounds(
+        {
+            nw: {
+                lat: nwLat,
+                lng: nwLng
+            },
+            se: {
+                lat: seLat,
+                lng: seLng
+            }},
+        {width: 600, height: 600}
+    );
+
+    console.log(fit);
 
     return (
         <GoogleMapBase>
             <GoogleMapReact
                 bootstrapURLKeys={{ key: "AIzaSyDL_A5wQnUSyio3otmRzu3N5yl9-eaQyZY" }}
                 center={center}
-                defaultZoom={ 12 }
+                defaultZoom={ 9 }
             >
                 {markers}
             </GoogleMapReact>
