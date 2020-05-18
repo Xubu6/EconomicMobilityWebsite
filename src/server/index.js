@@ -113,10 +113,12 @@ const setupServer = async () => {
     // Give them the SPA base page
     app.get("*", (req, res) => {
 
-        console.log(`Path is ${req.path}`);
-        if (!(req.path === '/' || req.path.includes("/v1/") || req.path === "/favicon.ico" || req.path.includes("/fonts/"))){
-            return res.status(401).send();
+        if (!req.session.respondent){
+            if (!(req.path === '/' || req.path === ("/v1/respondent"))){
+                return res.status(401).send();
+            }
         }
+
         const respondent = req.session.respondent;
         console.log(`Loading app for: ${respondent ? respondent.respondentId : "nobody!"}`);
         let preloadedState = respondent
