@@ -80,7 +80,7 @@ const setupServer = async () => {
         mongoose.set('useFindAndModify', false);
         mongoose.set('useCreateIndex', true);
         mongoose.set('useUnifiedTopology', true );
-        const mongoUrl = (env === "dev") ? conf.mongodbLocal : conf.mongodb;
+        const mongoUrl = (env === "dev") ? conf.mongodb : conf.mongodb;
         
         await mongoose.connect(mongoUrl, options);
         
