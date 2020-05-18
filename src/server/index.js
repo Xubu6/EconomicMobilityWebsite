@@ -14,18 +14,6 @@ const envConfig = require("simple-env-config");
 //const RedisStore = require("connect-redis")(session);
 //const redis = require("redis").createClient();
 
-const env = process.env.NODE_ENV ? process.env.NODE_ENV : "dev";
-
-let certFileBuf;
-let options;
-
-if (env != "dev") {
-    certFileBuf = fs.readFileSync('./rds-combined-ca-bundle.pem');
-    options = {
-        sslCA: certFileBuf
-    };
-}
-
 /**********************************************************************************************************/
 
 const setupServer = async () => {
@@ -43,6 +31,18 @@ const setupServer = async () => {
 
     const conf = await envConfig("./config/config.json", env);
     const port = process.env.PORT ? process.env.PORT : conf.port;
+    const env = process.env.NODE_ENV ? process.env.NODE_ENV : "dev";
+
+    if (env !== "dev") {
+        certFileBuf = fs.readFileSync('./rds-combined-ca-bundle.pem');
+        options = {
+            sslCA: certFileBuf
+        };
+    }
+
+    let certFileBuf;
+    let options;
+
 
     // Setup our Express pipeline
     let app = express();
