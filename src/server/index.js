@@ -29,9 +29,10 @@ const setupServer = async () => {
 
     // zillow-docdb-cluster.cluster-cuusjgphml3x.us-east-2.docdb.amazonaws.com:27017
 
+    const env = process.env.NODE_ENV ? process.env.NODE_ENV : "dev";
+
     const conf = await envConfig("./config/config.json", env);
     const port = process.env.PORT ? process.env.PORT : conf.port;
-    const env = process.env.NODE_ENV ? process.env.NODE_ENV : "dev";
 
     if (env !== "dev") {
         certFileBuf = fs.readFileSync('./rds-combined-ca-bundle.pem');
