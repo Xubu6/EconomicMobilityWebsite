@@ -35,6 +35,7 @@ const setupServer = async () => {
     const port = process.env.PORT ? process.env.PORT : conf.port;
 
     if (env !== "dev") {
+        console.log("cert file loaded");
         certFileBuf = fs.readFileSync('./rds-combined-ca-bundle.pem');
         options = {
             sslCA: certFileBuf
