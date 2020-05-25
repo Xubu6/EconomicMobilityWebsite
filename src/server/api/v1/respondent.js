@@ -13,7 +13,7 @@ module.exports = app => {
 
         if (!(req.body.respondentId.includes("danielryan")
             || req.body.respondentId.includes("eunjikim")
-            || req.body.respondentId.includes("sarakirshbuam")
+            || req.body.respondentId.includes("sarakirshbaum")
             || req.body.respondentId.includes("jamestang")
             || req.body.respondentId.includes("ancherli")
             || req.body.respondentId.includes("thomasmallick")
