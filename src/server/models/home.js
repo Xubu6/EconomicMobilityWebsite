@@ -21,7 +21,7 @@ let Home = new Schema({
     sqft: { type: String, required: true },
     danielryanCategory: { type: String, required: true},
     eunjikimCategory: { type: String, required: true},
-    sarakirshbuamCategory: { type: String, required: true},
+    sarakirshbaumCategory: { type: String, required: true},
     jamestangCategory: { type: String, required: true},
     ancherliCategory: { type: String, required: true},
     thomasmallickCategory: { type: String, required: true},
