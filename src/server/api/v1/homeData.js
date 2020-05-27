@@ -2,6 +2,7 @@
 "use strict";
 
 const Joi = require("@hapi/joi");
+const {sortByPrice} = require("../helper");
 
 module.exports = app => {
 
@@ -98,9 +99,9 @@ module.exports = app => {
                 zip: req.params.zipcode.toLowerCase()
             });
 
-            if (!homes) {
-                console.log(`Unknown zipcode error for ${req.sesssion.respondent.respondentId} requesting ${req.params.zipcode}`);
-                res.status(404).send({error: `unknown zipcode: ${req.sesssion.respondent.respondentId}`});
+            if (!homes || homes.length === 0) {
+                console.log(`Unknown zipcode error for ${req.session.respondent.respondentId} requesting ${req.params.zipcode}`);
+                res.status(404).send({error: `unknown zipcode: ${req.session.respondent.respondentId}`});
             }
             else {
                 const filteredHomes = homes.map(home => {
@@ -108,7 +109,7 @@ module.exports = app => {
                         _id: home._id,
                         address: home.address,
                         photos: home.photos,
-                        price: home.price,
+                        price: parseInt(home.price, 10),
                         bedrooms: home.bedrooms,
                         bathrooms: home.bathrooms,
                         sqft: home.sqft,
@@ -117,6 +118,10 @@ module.exports = app => {
                         lng: home.lng
                     }
                 });
+
+                // sorting by price
+                console.log("Sorting by price");
+                filteredHomes.sort(sortByPrice);
 
                 // FIXME This is where we will do the data priming to show inequality.. figure out specifics from eunji
 

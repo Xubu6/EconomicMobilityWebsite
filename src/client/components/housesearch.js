@@ -46,14 +46,27 @@ const ContentRow = styled.div`
   height: 80%;
 `;
 
+const Error = styled.div`
+  width: 100%;
+  height: 5%;
+  background-color: red;
+`
+
+const ErrorBase = ({error}) => {
+    return (error) ? (
+        <Error>Entered zip code is invalid</Error>
+    ) : (
+        <div/>
+    );
+}
+
 export const HouseSearch = () => {
 
     const [houses, setHouses] = useState(null);
-
     const [show, setShow] = useState(false);
     const [targetHouse, setTargetHouse] = useState(null);
-
     const [zip, setZip] = useState("");
+    const [error, setError] = useState(false);
 
     let onSubmit = (ev) => {
         ev.preventDefault();
@@ -79,10 +92,12 @@ export const HouseSearch = () => {
             .then(data => {
                 if (data.error) {
                     console.log(`Error on house data request: ${data.error}`);
+                    setError(true);
                     return; // FIXME change to show an error message to the user
                 }
 
                 console.log(`Setting homes to be for zip ${zip}`);
+                setError(false);
                 setHouses(data.homes);
             });
     };
@@ -95,6 +110,7 @@ export const HouseSearch = () => {
     };
 
     return (<LandingBase>
+        <ErrorBase error={error}/>
         <SearchBar>
             <FormInput id={"zip"} placeholder="ZIP Code" onChange={onChange} value={zip}/>
             <FormButton onClick={onSubmit}>Search</FormButton>

@@ -18,7 +18,8 @@ let ClassificationStyle = styled.div`
 
 export const Classification = ({handleClose, _id, address}) => {
 
-    const [classification, setClassification] = useState(0);
+    // this was originally 0, which caused unsure to be marked as 0 in the DB
+    const [classification, setClassification] = useState("unsure");
 
     let submitClassification = () => {
         //let classSubmit = document.getElementById("classification");

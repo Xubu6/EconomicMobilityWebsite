@@ -27,6 +27,10 @@ export const GoogleMapDisplay = ({ houses = "", setShow, setTargetHouse}) => {
 
     console.log(`Houses to be displayed within maps are : ${houses}`);
 
+    if (houses === undefined){
+        console.log("Houses is undefined");
+    }
+
     if (houses === ""){
         console.log("Houses equal to empty string");
     }
