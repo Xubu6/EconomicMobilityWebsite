@@ -1,6 +1,6 @@
-import React, { Fragment } from "react";
+import React, { useEffect, useState } from "react";
 import GoogleMapReact from "google-map-react";
-import { fitBounds } from 'google-map-react/utils';
+//import { fitBounds } from 'google-map-react/utils';
 import styled from "styled-components";
 import CustomMarker from "./custommarker";
 
@@ -15,10 +15,21 @@ const GoogleMapBase = styled.div`
 `;
 
 export const GoogleMapDisplay = ({ houses = "", setShow, setTargetHouse}) => {
-
-    let markers = [];
+    if (!houses){
+        console.log("Houses in null or undefined");
+        return (
+            <GoogleMapBase>
+                <GoogleMapReact
+                    bootstrapURLKeys={{ key: "AIzaSyDL_A5wQnUSyio3otmRzu3N5yl9-eaQyZY" }}
+                    defaultZoom={ 12 }
+                >
+                </GoogleMapReact>
+            </GoogleMapBase>
+        );
+    }
 
     let center = {};
+    let markers = [];
 
     let nwLat;
     let nwLng;
@@ -67,7 +78,6 @@ export const GoogleMapDisplay = ({ houses = "", setShow, setTargetHouse}) => {
             seLng = Math.min(seLng, home.lng);
 
             if (home.photos[0]) {
-                console.log(`Marker should be at lat: ${home.lat} lng: ${home.lng}`);
                 markers.push(
                     <CustomMarker
                         key={i}
@@ -89,32 +99,46 @@ export const GoogleMapDisplay = ({ houses = "", setShow, setTargetHouse}) => {
         }
     }
 
-    console.log(`nwLat : ${nwLat}`);
-    console.log(`nwLng : ${nwLng}`);
-    console.log(`seLat : ${seLat}`);
-    console.log(`seLng : ${seLng}`);
+    const bounds = {
+        nw: {
+            lat: nwLat,
+            lng: nwLng
+        },
+        se: {
+            lat: seLat,
+            lng: seLng
+        }
+    }
 
-    const fit = fitBounds(
-        {
-            nw: {
-                lat: nwLat,
-                lng: nwLng
-            },
-            se: {
-                lat: seLat,
-                lng: seLng
-            }},
-        {width: 600, height: 600}
-    );
+    // const fit = fitBounds(
+    //     {
+    //         nw: {
+    //             lat: nwLat,
+    //             lng: nwLng
+    //         },
+    //         se: {
+    //             lat: seLat,
+    //             lng: seLng
+    //         }},
+    //     {width: 600, height: 600}
+    // );
 
-    console.log(fit);
+    const fitAllMarkers= (map) => {
+        console.log(map);
+        map.fitBounds(bounds)
+        // map.fitToCoordinates(markers, {
+        //     edgePadding: 5,
+        //     animated: true
+        // })
+    }
 
     return (
         <GoogleMapBase>
             <GoogleMapReact
                 bootstrapURLKeys={{ key: "AIzaSyDL_A5wQnUSyio3otmRzu3N5yl9-eaQyZY" }}
                 center={center}
-                defaultZoom={ 9 }
+                defaultZoom={ 12 }
+                onMapReady={(map) => {fitAllMarkers(map)}}
             >
                 {markers}
             </GoogleMapReact>
