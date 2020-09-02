@@ -11,6 +11,8 @@ module.exports = app => {
     app.post("/v1/respondent", async (req, res) => {
         // FIXME check that the respondentId exists within the list of Ids???!!! or should I just accept it as right???
 
+        // this was to verify identity.. remove this to allow any name
+        // this can be changed to check against a list of approved respondent IDs
         if (!(req.body.respondentId.includes("danielryan")
             || req.body.respondentId.includes("eunjikim")
             || req.body.respondentId.includes("sarakirshbaum")
@@ -24,11 +26,13 @@ module.exports = app => {
             return;
         }
 
+        // checks mongo to see if respondent profile exists
         let respondent = await app.models.Respondent.findOne({
             respondentId: req.body.respondentId.toLowerCase()
         });
 
         if (respondent){
+            // respondent already exists
             // Log the respondent in
             await req.session.regenerate(() => {
                 // Set the session information
@@ -48,13 +52,18 @@ module.exports = app => {
             return;
         }
 
+        // the following is to create a respondent.
+        // Ideally, this would be a different REST endpoint
+
         // Generate grouping (4 groups)
         // 1 - ?
         // 2 - ?
         // 3 - ?
         // 4 - ?
+        // This grouping is for the respondent priming.. Ask Professor Kim if confused
         let experimentalGroup = Math.ceil(Math.random()*4);
         if (experimentalGroup < 1 || experimentalGroup > 4){
+          // this will never happen not sure why I put this here
             console.log(`Grouping error. ${experimentalGroup} is not valid (1-4)`);
             res.status(500).send({error: "Internal error, please try again"});
         } else {
@@ -74,6 +83,7 @@ module.exports = app => {
                     await respondent.save();
 
                     // Log the respondent in
+                    // session allows user to not have to log back in everytime
                     req.session.regenerate(() => {
                         // Set the session information
                         req.session.respondent = {
@@ -129,9 +139,10 @@ module.exports = app => {
 
     /**
      * Fetch rating information by respondentId
+     * some info here is left over from a different project
      *
      * @param {req.body.respondentId} respondentId for the respondent
-     * @return {200, {username, primary_email, first_name, last_name, city, games[...]}}
+     * @return
      */
     app.get("/v1/respondent/:respondentId", async (req, res) => {
         console.log(req.params.respondentId);

@@ -11,6 +11,7 @@ let RatingsStyle = styled.div`
     text-align: center;
 `;
 
+// THIS IS NO LONGER USED. CAN DELETE
 export const MyRating = ({rating, setRating, displayName}) => {
 
     return (

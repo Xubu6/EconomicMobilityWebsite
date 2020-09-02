@@ -8,6 +8,7 @@ const Schema = mongoose.Schema;
 *
 * */
 
+// Schema about the respondent
 let Respondent = new Schema({
     respondentId: { type: String, required: true, index: { unique: true } },
     experimentalGroup: { type: Number, require: true }

@@ -1,5 +1,10 @@
 "use strict";
 
+/*
+This is the base component of the website
+*/
+
+
 import React, {useState} from 'react';
 import styled from "styled-components";
 import {HouseCardList} from "./housecardlist";
@@ -62,13 +67,24 @@ const ErrorBase = ({error}) => {
 
 export const HouseSearch = () => {
 
+    // full search results for houses within the zip code
     const [houses, setHouses] = useState(null);
+
+    // boolean for showing a detailed house card
     const [show, setShow] = useState(false);
+
+    // target house for the detailed house card
     const [targetHouse, setTargetHouse] = useState(null);
+
+    // zipcode that is being searched
     const [zip, setZip] = useState("");
+
+    // Error for nonexistent zip code
     const [error, setError] = useState(false);
 
+    // Called upon search button pressing
     let onSubmit = (ev) => {
+      // this prevents the form from doing anything.. not really useful here I don't think
         ev.preventDefault();
 
         console.log(`Zip to be searched for ${zip}`);
@@ -77,6 +93,7 @@ export const HouseSearch = () => {
             return;
         }
 
+        // backend data requests for this zip
         fetch(`/v1/homeData/${zip}`, {
             // body: JSON.stringify({
             //     username: 'doesnt',
@@ -98,6 +115,7 @@ export const HouseSearch = () => {
 
                 console.log(`Setting homes to be for zip ${zip}`);
                 setError(false);
+                // saves the search results, propagates the changes through the smaller components
                 setHouses(data.homes);
             });
     };
@@ -116,8 +134,11 @@ export const HouseSearch = () => {
             <FormButton onClick={onSubmit}>Search</FormButton>
         </SearchBar>
         <ContentRow>
+            // This manages the entirety of the google map dispalay
             <GoogleMapDisplay houses={houses} show={show} setShow={setShow} targetHouse={targetHouse} setTargetHouse={setTargetHouse}/>
-            <HouseCardList style={{width: "40%", alignSelf: 'flex-end'}} 
+
+            // this manages the house photos
+            <HouseCardList style={{width: "40%", alignSelf: 'flex-end'}}
               houses={houses} show={show} setShow={setShow} targetHouse={targetHouse} setTargetHouse={setTargetHouse}/>
         </ContentRow>
     </LandingBase>);

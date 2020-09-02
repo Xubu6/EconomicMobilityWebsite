@@ -37,6 +37,7 @@ const customStyles = {
     }
 };
 
+// this is fun popup handling code, was a little tricky to set up
 export const HouseDetailsModal = ({show, handleClose, _id, address, price, photos, bedrooms, bathrooms, sqft}) => {
 
     function openModal() {
@@ -64,6 +65,7 @@ export const HouseDetailsModal = ({show, handleClose, _id, address, price, photo
                 contentLabel="Example Modal"
             >
                 <button onClick={handleClose}>close</button>
+                // shows detailed home information
                 <DetailedHouseCard style={{
                     position: 'relative',
                     height: "80%",

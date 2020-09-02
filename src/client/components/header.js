@@ -67,6 +67,7 @@ const HeaderBase = styled.div`
   border-bottom: 1px solid #B8B8B8;
 `;
 
+// I don't really remember what's going on here haha
 export const Header = ({ user = "", email = "" }) => (
     <HeaderBase>
         <HeaderLeft />

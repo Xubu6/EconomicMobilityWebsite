@@ -69,6 +69,8 @@ let DetailedPhotosList = styled.div`
 
 let DetailedHomeDetails = ({_id, address, bedrooms, bathrooms, sqft, price, handleClose}) => {
 
+    // Commented code here is from a rating system that Professor Kim asked for, then plans changed
+    // Delete once confirming the vision doesn't include any Ratings
     // const [rating1, setRating1] = useState(0);
     // const [rating2, setRating2] = useState(0);
     // const [rating3, setRating3] = useState(0);
@@ -102,6 +104,7 @@ let DetailedHomeDetails = ({_id, address, bedrooms, bathrooms, sqft, price, hand
     //     handleClose();
     // };
 
+    // This was the rating components for below
     /*
                 <MyRating rating={rating1} setRating={setRating1} displayName={"Cleanliness"}/>
             <MyRating rating={rating2} setRating={setRating2} displayName={"Curb Appeal"}/>
@@ -128,15 +131,18 @@ let DetailedHomeDetails = ({_id, address, bedrooms, bathrooms, sqft, price, hand
     );
 };
 
+// Most of the stuff in this file was done for styling, which I am not a fan of
 export const DetailedHouseCard = ({ show, _id, address, price, photos, bedrooms, bathrooms, sqft, handleClose}) => {
     if (!show){
         return <div/>;
     }
 
     return (<CardBase>
+        // the photos, again styling is awful
         <DetailedPhotosList>
             <DetailedCardPhotoList photos={photos}/>
         </DetailedPhotosList>
+        // the actual house info
         <DetailedHomeDetails style={{
             width: '50%',
             height: '30%',

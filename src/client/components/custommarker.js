@@ -27,11 +27,14 @@ const Marker = ({text, onClick}) => (<div onClick={onClick}
                 // lat={home.lat}
                 // lng={home.lng}
                 // text={i}
+
+// This marker is for letting users click on the map and see the house
 const CustomMarker = ({key, _id, address, price, photos, bedrooms, bathrooms, sqft, lat, lng, setShow, setTargetHouse, text}) => {
 
     const onMarkerClick = (evt) => {
 
         // add the id?
+        // same setTargetHouse and setShow from the other components
         setTargetHouse({
             _id: _id,
             address: address,

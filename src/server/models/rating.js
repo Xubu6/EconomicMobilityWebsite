@@ -8,6 +8,8 @@ const Schema = mongoose.Schema;
 * rating3 (1-5)
 * */
 
+// This was the schema for the rating system Professor Kim wanted. I don't think
+// it's needed anymore, but check with her
 let Rating = new Schema({
     respondent: { type: Schema.ObjectId, required: true, ref: "Respondent", index: true, unique: false},
     home: { type: Schema.ObjectId, required: true, ref: "Home", index: true, unique: false },

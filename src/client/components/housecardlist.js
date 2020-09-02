@@ -8,12 +8,6 @@ import {HouseDetailsModal} from './housedetailsmodal';
 
 /*************************************************************************/
 
-// const CardImg = styled.div`
-//   position: absolute;
-//   height: auto;
-//   width: 100%;
-// `;
-
 let CardBase = styled.div`
   width: 46%;
   justify-content: flex-end;
@@ -48,7 +42,7 @@ let HomePriceStyle = styled.div`
 `;
 
 let AddressDetails = styled.div`
-    
+
 `;
 
 let HomeDetails = ({bedrooms, bathrooms, sqft, price}) => {
@@ -64,10 +58,14 @@ let HomeDetails = ({bedrooms, bathrooms, sqft, price}) => {
     );
 };
 
+// component for an individual HouseCard (single house listing)
 export const HouseCard = ({ _id, address, price, photos, bedrooms, bathrooms, sqft, category, lat, lng, onClick}) => {
 // src={`${photos[0].replace('/images/', 'https://zillowprojs3.s3.us-east-2.amazonaws.com/')}`}
+    // [params are self explanatory] onClick is the function for setting show and targetHouse
 
     return ((photos[0]) ? (<CardBase>
+            // photo url does a string replace cause I am too lazy to write something to update the image paths in the DB
+            // that's very doable though using mongoose in a script
         <PrincipalImg src={`${photos[0].replace('/images/', 'https://zillowprojs3.s3.us-east-2.amazonaws.com/')}`}
                       onClick={() => onClick(_id, address, price, photos, bedrooms, bathrooms, sqft, category, lat, lng)}/>
         <HomeDetails bedrooms={bedrooms} bathrooms={bathrooms} sqft={sqft} price={price}
@@ -79,14 +77,7 @@ export const HouseCard = ({ _id, address, price, photos, bedrooms, bathrooms, sq
 };
 
 /*************************************************************************/
-
-const PileBase = styled.div`
-  margin: 5px;
-  position: relative;
-  display: inline-block;
-  width: 12%;
-`;
-
+// I hate styling
 const CardCol = styled.div`
   align-items: flex-end;
   text-align: right;
@@ -108,8 +99,13 @@ const HouseModalStyle = {
     width: "80%"
 };
 
+// component rendered from HoushSearch component
 export const HouseCardList = ({houses, show, setShow, targetHouse, setTargetHouse}) => {
-    //console.log(houses);
+    // houses -> list of houses, could be "null"
+    // show -> should it show a detailed house card?
+    // setShow -> function to be called to set show.. setShow(true) or setShow(false)
+    // targetHouse -> house to show if show==targetHouse
+    // setTargetHouse -> function to be called to set a house as targetHouse
 
     const handleClose = () => {
         setTargetHouse(null);
@@ -131,6 +127,7 @@ export const HouseCardList = ({houses, show, setShow, targetHouse, setTargetHous
         setShow(true);
     };
 
+    // creates an array of HouseCard components
     const children = houses ? (houses.map((houseInfo, i) => {
 
         return (
@@ -153,6 +150,7 @@ export const HouseCardList = ({houses, show, setShow, targetHouse, setTargetHous
     return (
         <CardCol>
             {children}
+            // this is for the popup window with detailed house info
             <HouseDetailsModal
                 style={HouseModalStyle}
                 show={show}
@@ -162,18 +160,4 @@ export const HouseCardList = ({houses, show, setShow, targetHouse, setTargetHous
             </HouseDetailsModal>
         </CardCol>
     );
-};
-
-HouseCardList.propTypes = {
-    // cards: PropTypes.arrayOf(PropTypes.object).isRequired,
-    // onClick: PropTypes.func,
-    // horizontal: PropTypes.bool,
-    // spacing: PropTypes.number,
-    // maxCards: PropTypes.number,
-    // top: PropTypes.number,
-    // left: PropTypes.number
-};
-HouseCardList.defaultProps = {
-    // horizontal: false, // Layout horizontal?
-    // spacing: 8 // In percent
 };

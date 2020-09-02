@@ -9,7 +9,8 @@ req.body.respondentId.includes("danielryan")
             || req.body.respondentId.includes("ancherli")
             || req.body.respondentId.includes("thomasmallick")
  */
-
+// Schema for the homes in the databasse
+// danielryanCategory and similarly named fields were for classification from the other RAs
 let Home = new Schema({
     zip: { type: Number, required: true },
     address: { type: String, required: true, index: { unique: true } },
@@ -29,6 +30,7 @@ let Home = new Schema({
     lng: {type: Number, required: true}
 });
 
+// checks a few fields before saving
 Home.pre("save", function(next) {
     // Sanitize strings
     this.address = this.address.replace(/<(?:.|\n)*?>/gm, "");

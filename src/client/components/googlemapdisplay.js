@@ -14,6 +14,7 @@ const GoogleMapBase = styled.div`
   height: 100%
 `;
 
+// this google map component caused me trouble
 export const GoogleMapDisplay = ({ houses = "", setShow, setTargetHouse}) => {
     if (!houses){
         console.log("Houses in null or undefined");
@@ -36,6 +37,7 @@ export const GoogleMapDisplay = ({ houses = "", setShow, setTargetHouse}) => {
     let seLat;
     let seLng;
 
+    // this was debugging stuff
     console.log(`Houses to be displayed within maps are : ${houses}`);
 
     if (houses === undefined){
@@ -62,6 +64,7 @@ export const GoogleMapDisplay = ({ houses = "", setShow, setTargetHouse}) => {
         seLng = houses[0].lng;
 
         let i = 0;
+
         for (let home of houses){
 
             if (!home)
@@ -78,6 +81,7 @@ export const GoogleMapDisplay = ({ houses = "", setShow, setTargetHouse}) => {
             seLng = Math.min(seLng, home.lng);
 
             if (home.photos[0]) {
+                // add to array of markers to display on the google map
                 markers.push(
                     <CustomMarker
                         key={i}
@@ -99,6 +103,7 @@ export const GoogleMapDisplay = ({ houses = "", setShow, setTargetHouse}) => {
         }
     }
 
+    // TODO failed attempt to set the zoom of the google map.. needs work here
     const bounds = {
         nw: {
             lat: nwLat,
@@ -123,6 +128,7 @@ export const GoogleMapDisplay = ({ houses = "", setShow, setTargetHouse}) => {
     //     {width: 600, height: 600}
     // );
 
+    // part of the failed attempt to set the markers
     const fitAllMarkers= (map) => {
         console.log(map);
         map.fitBounds(bounds)
@@ -134,10 +140,12 @@ export const GoogleMapDisplay = ({ houses = "", setShow, setTargetHouse}) => {
 
     return (
         <GoogleMapBase>
+            // Someone else's component
             <GoogleMapReact
                 bootstrapURLKeys={{ key: "AIzaSyDL_A5wQnUSyio3otmRzu3N5yl9-eaQyZY" }}
                 center={center}
                 defaultZoom={ 12 }
+                // failed attempt to size the window
                 onMapReady={(map) => {fitAllMarkers(map)}}
             >
                 {markers}

@@ -25,6 +25,8 @@ const setupServer = async () => {
 
     // mongodb://zillow-docdb-cluster.cluster-cuusjgphml3x.us-east-2.docdb.amazonaws.com:27017/?gssapiServiceName=mongodb
 
+    // url for where the images are hosted
+    // images are hosted on Amazon Documen DB instance.. Prof. Kim should have login info
     let doc_db_url = "mongodb://ZillowProjUser:ZillowProjPass@zillow-docdb-cluster.cuusjgphml3x.us-east-2.docdb.amazonaws.com:27017/zillow?ssl=true&ssl_ca_certs=rds-combined-ca-bundle.pem&retryWrites=false";
 
     // zillow-docdb-cluster.cluster-cuusjgphml3x.us-east-2.docdb.amazonaws.com:27017
@@ -37,9 +39,8 @@ const setupServer = async () => {
     let certFileBuf;
     let options;
 
-
-
     if (env !== "dev") {
+        // this cert file is for connect to the document DB
         console.log("cert file loaded");
         certFileBuf = fs.readFileSync('./rds-combined-ca-bundle.pem');
         options = {
@@ -87,9 +88,9 @@ const setupServer = async () => {
         mongoose.set('useCreateIndex', true);
         mongoose.set('useUnifiedTopology', true );
         const mongoUrl = (env === "dev") ? conf.mongodbLocal : conf.mongodb;
-        
+
         await mongoose.connect(mongoUrl, options);
-        
+
         //await mongoose.connect(doc_db_url, options);
         console.log(`MongoDB connected: ${mongoUrl}`);
     } catch (err) {
@@ -149,6 +150,7 @@ const setupServer = async () => {
         http
             .createServer((req, res) => {
                 //const location = `https://${req.headers.host}${req.url}`;
+                // I hardcoded this http->https redirect because of bots crawling the ec2
                 const location = `https://studier.me`;
                 console.log(`Redirect to: ${location}`);
                 res.writeHead(302, { Location: location });
