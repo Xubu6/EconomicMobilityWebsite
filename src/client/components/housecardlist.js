@@ -64,8 +64,8 @@ export const HouseCard = ({ _id, address, price, photos, bedrooms, bathrooms, sq
     // [params are self explanatory] onClick is the function for setting show and targetHouse
 
     return ((photos[0]) ? (<CardBase>
-            // photo url does a string replace cause I am too lazy to write something to update the image paths in the DB
-            // that's very doable though using mongoose in a script
+            {/* // photo url does a string replace cause I am too lazy to write something to update the image paths in the DB
+            // that's very doable though using mongoose in a script */}
         <PrincipalImg src={`${photos[0].replace('/images/', 'https://zillowprojs3.s3.us-east-2.amazonaws.com/')}`}
                       onClick={() => onClick(_id, address, price, photos, bedrooms, bathrooms, sqft, category, lat, lng)}/>
         <HomeDetails bedrooms={bedrooms} bathrooms={bathrooms} sqft={sqft} price={price}
@@ -150,7 +150,7 @@ export const HouseCardList = ({houses, show, setShow, targetHouse, setTargetHous
     return (
         <CardCol>
             {children}
-            // this is for the popup window with detailed house info
+            {/* // this is for the popup window with detailed house info */}
             <HouseDetailsModal
                 style={HouseModalStyle}
                 show={show}

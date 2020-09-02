@@ -134,10 +134,10 @@ export const HouseSearch = () => {
             <FormButton onClick={onSubmit}>Search</FormButton>
         </SearchBar>
         <ContentRow>
-            // This manages the entirety of the google map dispalay
+            {/* // This manages the entirety of the google map dispalay */}
             <GoogleMapDisplay houses={houses} show={show} setShow={setShow} targetHouse={targetHouse} setTargetHouse={setTargetHouse}/>
 
-            // this manages the house photos
+            {/* // this manages the house photos */}
             <HouseCardList style={{width: "40%", alignSelf: 'flex-end'}}
               houses={houses} show={show} setShow={setShow} targetHouse={targetHouse} setTargetHouse={setTargetHouse}/>
         </ContentRow>

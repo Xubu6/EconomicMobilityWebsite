@@ -79,7 +79,7 @@ class MyApp extends Component {
         return (
             <div>
             <Header/>
-            // BrowserRouter is around so other paths can be created
+             {/* BrowserRouter is around so other paths can be created */}
             <BrowserRouter>
                 <Route path="/" render={props =>
                     // if loggedIn, display the search menu

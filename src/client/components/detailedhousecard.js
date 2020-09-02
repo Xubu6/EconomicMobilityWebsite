@@ -138,11 +138,11 @@ export const DetailedHouseCard = ({ show, _id, address, price, photos, bedrooms,
     }
 
     return (<CardBase>
-        // the photos, again styling is awful
+        {/* // the photos, again styling is awful */}
         <DetailedPhotosList>
             <DetailedCardPhotoList photos={photos}/>
         </DetailedPhotosList>
-        // the actual house info
+        {/* // the actual house info */}
         <DetailedHomeDetails style={{
             width: '50%',
             height: '30%',

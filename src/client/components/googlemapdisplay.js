@@ -140,7 +140,7 @@ export const GoogleMapDisplay = ({ houses = "", setShow, setTargetHouse}) => {
 
     return (
         <GoogleMapBase>
-            // Someone else's component
+            {/* // Someone else's component */}
             <GoogleMapReact
                 bootstrapURLKeys={{ key: "AIzaSyDL_A5wQnUSyio3otmRzu3N5yl9-eaQyZY" }}
                 center={center}
