@@ -17,8 +17,10 @@ src
 config --> folder holding a file with some configuration variables
 
 
+# Notes
+I need to get you the Zillow pem file to ssh into the ec2. Remind me if you don't have this
 
-Commands
+# Commands
 
 // file copy to the ec2
 scp -i "aws/zillow_project_key.pem" "homes.json" ec2-user@ec2-18-189-215-44.us-east-2.compute.amazonaws.com:/home/ec2-user/homes.json
