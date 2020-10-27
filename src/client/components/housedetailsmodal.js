@@ -28,17 +28,16 @@ const customStyles = {
         position              : "absolute",
         height                : "80%",
         top                   : '10%',
-        left                  : '15%',
-        right                 : '15%',
+        left                  : '20%',
+        right                 : '20%',
         bottom                : '0%',
-        overflow              : 'hide'
-        //marginRight           : '-50%',
-        //transform             : 'translate(-50%, -50%)'
+        overflow              : 'hide',
+        border                : '2px solid grey'
     }
 };
 
 // this is fun popup handling code, was a little tricky to set up
-export const HouseDetailsModal = ({show, handleClose, _id, address, price, photos, bedrooms, bathrooms, sqft}) => {
+export const HouseDetailsModal = ({show, handleClose, _id, address, price, photos, bedrooms, bathrooms, classification, sqft}) => {
 
     function openModal() {
         //setIsOpen(true);
@@ -51,7 +50,7 @@ export const HouseDetailsModal = ({show, handleClose, _id, address, price, photo
     }
 
     function closeModal(){
-        setIsOpen(false);
+        // setIsOpen(false);
     }
 
     //console.log(photos);
@@ -68,10 +67,10 @@ export const HouseDetailsModal = ({show, handleClose, _id, address, price, photo
                 {/* // shows detailed home information */}
                 <DetailedHouseCard style={{
                     position: 'relative',
-                    height: "80%",
-                    width: "80%"
+                    height: "100",
+                    width: "100%"
                 }} show={show} _id={_id}
-                    address={address} price={price} photos={photos} bedrooms={bedrooms} bathrooms={bathrooms} sqft={sqft} handleClose={handleClose}/>
+                    address={address} price={price} photos={photos} bedrooms={bedrooms} bathrooms={bathrooms} classification={classification} sqft={sqft} handleClose={handleClose}/>
             </Modal>
     );
 };

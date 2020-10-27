@@ -7,7 +7,7 @@ const fontColor = "#006aff";
 
 const HeaderLeftBase = styled.div`
   flex-grow: 1;
-  font-style: italic;
+  font-style: bold;
   & > h2 {
     color: ${fontColor};
     margin: 0.75em 0 0.75em 0.5em;
@@ -24,7 +24,7 @@ const HeaderLeftBase = styled.div`
 const HeaderLeft = ({ user }) => {
     return (
         <HeaderLeftBase>
-            <h2>Housing Search</h2>
+            <h2>Get to Know Your Neighborhood!</h2>
         </HeaderLeftBase>
     );
 };

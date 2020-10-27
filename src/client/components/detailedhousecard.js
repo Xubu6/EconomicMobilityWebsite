@@ -1,153 +1,148 @@
 import styled from "styled-components";
-import React, {useState} from "react";
-import {DetailedCardPhotoList} from "./detailedcardphotolist"
-import {MyRating} from "./ratings";
-import {Button} from "react-bootstrap";
-import {Classification} from "./classification";
+import React, { useState } from "react";
+import { DetailedCardPhotoList } from "./detailedcardphotolist";
+import { Button } from "react-bootstrap";
+import { Classification } from "./classification";
 
 let CardBase = styled.div`
   display: flex;
   position: absolute;
   flex-direction: row;
   justify-content: space-around;
-  width: 100%;
-  height: 100%;
-`;
-
-let PrincipalImg = styled.img`
-  position: relative;
-  width: 100%;
-  height: 70%
+  width: 96%;
+  height: 92%;
 `;
 
 let HomeDetailsStyle = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-around;
-  width: 100%
+  width: 100%;
 `;
 
 let CardDetails = styled.div`
   display: flex;
-  //position: absolute;
-  width: 50%;
-  height: 50%;
+  width: 100%;
+  height: 100%;
   flex-direction: column;
-  justify-content: space-around;
-  align-content: center;
+  margin-left: 10px;
 `;
 
 let HomeInfoStyle = styled.div`
   display: flex;
-  float: right;
-  width: auto;
+  float: left;
+  font-size: 14px;
+  font-weight: lighter;
+  font-style: italic;
+  text-align: left;
+  margin: 10px;
+`;
+
+let ClassificationInfoStyle = styled.div`
+  display: flex;
+  float: left;
+  font-size: 14px;
+  font-weight: lighter;
+  font-style: italic;
+  text-align: left;
+  margin: 10px;
 `;
 
 let HomePriceStyle = styled.div`
-    display: flex;
-    float: left;
-    width: auto;
-    font-size: 24px;
-    text-align: center;
+  display: flex;
+  float: left;
+  font-size: 24px;
+  font-weight: bold;
+  text-align: left;
 `;
 
 let AddressDetails = styled.div`
-    justify-content: flex-end;
-    text-align: center;
-    font-size: 16px;
+  justify-content: flex-end;
+  text-align: left;
+  font-size: 16px;
+  margin-bottom: 15px;
 `;
 
 let DetailedPhotosList = styled.div`
-    display: flex;
-    overflow: auto;
-//    position: absolute;
-    //width: 576px;
-    width: 50%;
-    height: 90%;
-    float: left;
+  display: flex;
+  overflow: auto;
+  margin-top: 33px;
+  top: 10%;
+  width: 100%;
+  flex-wrap: wrap;
+  height: 96%;
+  float: left;
 `;
 
-let DetailedHomeDetails = ({_id, address, bedrooms, bathrooms, sqft, price, handleClose}) => {
+let Header = styled.div`
+  z-index: 10000;
+  position: absolute;
+  display: block;
+  align-items: center;
+  text-align: center;
+  text-decoration: underline;
+  font-weight: bold;
+  font-size: 28px;
+  margin-bottom: 10px;
+`;
 
-    // Commented code here is from a rating system that Professor Kim asked for, then plans changed
-    // Delete once confirming the vision doesn't include any Ratings
-    // const [rating1, setRating1] = useState(0);
-    // const [rating2, setRating2] = useState(0);
-    // const [rating3, setRating3] = useState(0);
-
-    // let submitRatings = () => {
-    //     // implement rating submission logic here
-    //     console.log(`Verify {${rating1}, ${rating2}, ${rating3}} and submit them`);
-    //
-    //     fetch("/v1/rating", {
-    //         body: JSON.stringify({
-    //             _id: _id,
-    //             address: address,
-    //             rating1: rating1,
-    //             rating2: rating2,
-    //             rating3: rating3
-    //         }),
-    //         method: "POST",
-    //         credentials: "include",
-    //         headers: {
-    //             "content-type": "application/json"
-    //         }
-    //     }).then(res => {
-    //         res.json().then(data => {
-    //             if (res.ok) {
-    //                 console.log(`Saved rating with ${data.address}`);
-    //             } else {
-    //                 Console.log(`Rating error for address: ${data.address}`);
-    //             }
-    //         });
-    //     });
-    //     handleClose();
-    // };
-
-    // This was the rating components for below
-    /*
-                <MyRating rating={rating1} setRating={setRating1} displayName={"Cleanliness"}/>
-            <MyRating rating={rating2} setRating={setRating2} displayName={"Curb Appeal"}/>
-            <MyRating rating={rating3} setRating={setRating3} displayName={"Livability"}/>
-
-            <div style={{width: "100%", textAlign: "center"}}>
-                <Button variant={"primary"} style={{width: "20%", textAlign: "center"}} size={"sm"} onClick={submitRatings}>Submit Ratings</Button>
-            </div>
-    */
-
-    return (
-        <CardDetails>
-            <AddressDetails>{address.replace(/-/g, ' ')}</AddressDetails>
-            <HomeDetailsStyle>
-                <HomePriceStyle>${price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</HomePriceStyle>
-                <HomeInfoStyle>{bedrooms} bd | {bathrooms} ba | {sqft} sqft </HomeInfoStyle>
-                {/*<HomeInfoStyle placement={'right'}>{bathrooms} bath </HomeInfoStyle>*/}
-                {/*<HomeInfoStyle placement={'right'}>{sqft} sqft </HomeInfoStyle>*/}
-            </HomeDetailsStyle>
-            <br/>
-            <br/>
-            <Classification handleClose={handleClose} _id={_id} address={address} />
-        </CardDetails>
-    );
+let DetailedHomeDetails = ({
+  _id,
+  address,
+  bedrooms,
+  bathrooms,
+  sqft,
+  price,
+  classification,
+  handleClose,
+}) => {
+  return (
+    // <CardDetails>
+    <CardDetails>
+      <AddressDetails>{address.replace(/-/g, " ")}</AddressDetails>
+      <br />
+      <HomeDetailsStyle>
+        <HomePriceStyle>
+          ${price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+        </HomePriceStyle>
+        <br />
+        <HomeInfoStyle>{bathrooms} bath </HomeInfoStyle>
+        <br />
+        <HomeInfoStyle>{sqft} sqft </HomeInfoStyle>
+      </HomeDetailsStyle>
+      <br />
+      <ClassificationInfoStyle>
+        Classification: {classification}
+      </ClassificationInfoStyle>
+    </CardDetails>
+    // </CardDetails>
+  );
 };
 
 // Most of the stuff in this file was done for styling, which I am not a fan of
-export const DetailedHouseCard = ({ show, _id, address, price, photos, bedrooms, bathrooms, sqft, handleClose}) => {
-    if (!show){
-        return <div/>;
-    }
+export const DetailedHouseCard = ({
+  show,
+  _id,
+  address,
+  price,
+  photos,
+  bedrooms,
+  bathrooms,
+  sqft,
+  classification,
+  handleClose,
+}) => {
+  if (!show) {
+    return <div />;
+  }
 
-    return (<CardBase>
-        {/* // the photos, again styling is awful */}
-        <DetailedPhotosList>
-            <DetailedCardPhotoList photos={photos}/>
-        </DetailedPhotosList>
-        {/* // the actual house info */}
-        <DetailedHomeDetails style={{
-            width: '50%',
-            height: '30%',
-            display: 'flex',
-            float: 'right'
-        }} _id={_id} address={address} bedrooms={bedrooms} bathrooms={bathrooms} sqft={sqft} price={price} handleClose={handleClose}/>
-    </CardBase>);
+  return (
+    <CardBase>
+      <Header>Photos</Header>
+      <br/>
+      <DetailedPhotosList>
+        <DetailedCardPhotoList photos={photos} />
+      </DetailedPhotosList>
+    </CardBase>
+  );
 };

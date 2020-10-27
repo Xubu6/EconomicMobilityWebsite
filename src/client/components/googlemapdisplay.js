@@ -9,7 +9,7 @@ import CustomMarker from "./custommarker";
 const GoogleMapBase = styled.div`
   position: relative;
   padding-right: 4px;
-  width: 50%;
+  width: 27%;
   display: flex;
   height: 100%
 `;
@@ -92,6 +92,7 @@ export const GoogleMapDisplay = ({ houses = "", setShow, setTargetHouse}) => {
                         bedrooms={home.bedrooms}
                         bathrooms={home.bathrooms}
                         sqft={home.sqft}
+                        classification={home.classification}
                         lat={home.lat}
                         lng={home.lng}
                         setShow={setShow}

@@ -71,7 +71,8 @@ class MyApp extends Component {
             credentials: "include"
         }).then(() => {
             // Reset user state
-            this.setState(defaultUser);
+            // this.setState(defaultUser);
+            alert("An unexpected error occurred.");
         });
     }
 
@@ -85,7 +86,7 @@ class MyApp extends Component {
                     // if loggedIn, display the search menu
                     // if not, show login page
                     this.loggedIn() ?
-                        (<HouseSearch {...props}/>):
+                        (<HouseSearch {...props} respondentId={this.state.respondentId} experimentalGroup={this.state.experimentalGroup}/>):
                         (<Login {...props} logIn={this.logIn}/>)
                 }/>
             </BrowserRouter>

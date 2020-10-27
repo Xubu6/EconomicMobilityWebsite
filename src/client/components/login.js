@@ -65,7 +65,7 @@ export const Login = (props) => {
                     console.log(`Logged in with ${data.respondentId}`);
                     props.logIn(data.respondentId);
                 } else {
-                    Console.log(`Login error for respondentId: ${data.respondentId}`);
+                    console.log(`Login error for respondentId: ${data.respondentId}`);
                 }
             });
         });

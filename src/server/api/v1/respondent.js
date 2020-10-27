@@ -13,18 +13,18 @@ module.exports = app => {
 
         // this was to verify identity.. remove this to allow any name
         // this can be changed to check against a list of approved respondent IDs
-        if (!(req.body.respondentId.includes("danielryan")
-            || req.body.respondentId.includes("eunjikim")
-            || req.body.respondentId.includes("sarakirshbaum")
-            || req.body.respondentId.includes("jamestang")
-            || req.body.respondentId.includes("ancherli")
-            || req.body.respondentId.includes("thomasmallick")
-        ))
-        {
-            console.log(`Not authorized: ${req.body.respondentId}`);
-            res.status(401).send({error: "Unauthorized respondentId"});
-            return;
-        }
+        // if (!(req.body.respondentId.includes("danielryan")
+        //     || req.body.respondentId.includes("eunjikim")
+        //     || req.body.respondentId.includes("sarakirshbaum")
+        //     || req.body.respondentId.includes("jamestang")
+        //     || req.body.respondentId.includes("ancherli")
+        //     || req.body.respondentId.includes("thomasmallick")
+        // ))
+        // {
+        //     console.log(`Not authorized: ${req.body.respondentId}`);
+        //     res.status(401).send({error: "Unauthorized respondentId"});
+        //     return;
+        // }
 
         // checks mongo to see if respondent profile exists
         let respondent = await app.models.Respondent.findOne({

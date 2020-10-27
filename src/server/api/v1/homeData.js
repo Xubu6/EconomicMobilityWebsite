@@ -77,8 +77,10 @@ module.exports = app => {
     app.head("/v1/homeData/:zipcode", async (req, res) => {
         if (req.session.respondent) {
             let Home = await app.models.Home.findOne({
-                zip: req.params.zipcode.toLowerCase()
+                zip: req.params.zipcode.toLowerCase(),
+                $and: [ { $where: "this.jamestangCategory == this.ancherliCategory"}, {jamestangCategory: { $in: [ "rich", "medium", "poor" ] }}]
             });
+            console.log(Home)
             if (!Home)
                 res.status(404).send({error: `unknown zipcode: ${req.params.zipcode}`});
             else res.status(200).end();
@@ -96,15 +98,25 @@ module.exports = app => {
 
         if (req.session.respondent) {
             let homes = await app.models.Home.find({
-                zip: req.params.zipcode.toLowerCase()
+                zip: req.params.zipcode.toLowerCase(),
+                // following filter is to only query for housing entries where james and ancher categories both exist and are equal and are poor, rich, or medium
+                $and: [{ $where: "this.jamestangCategory == this.ancherliCategory"}, { jamestangCategory: { $in: [ "rich", "medium", "poor" ] }}]
             });
 
             if (!homes || homes.length === 0) {
                 console.log(`Unknown zipcode error for ${req.session.respondent.respondentId} requesting ${req.params.zipcode}`);
-                res.status(404).send({error: `unknown zipcode: ${req.session.respondent.respondentId}`});
+                res.status(404).send({error: `unknown zipcode: ${req.params.zipcode}`});
             }
             else {
+                let poorCnt = 0, medCnt = 0, richCnt = 0; // counts for number of each classification in this zip code
+
                 const filteredHomes = homes.map(home => {
+                    const classification = (home.jamestangCategory === home.ancherliCategory) ? home.jamestangCategory : "no classification";
+
+                    if (classification === "poor") poorCnt++;
+                    if (classification === "medium") medCnt++;
+                    if (classification === "rich") richCnt++;
+
                     return {
                         _id: home._id,
                         address: home.address,
@@ -113,22 +125,29 @@ module.exports = app => {
                         bedrooms: home.bedrooms,
                         bathrooms: home.bathrooms,
                         sqft: home.sqft,
-                        category: home.category,
+                        classification: classification, // guaranteed to be the correct classification
                         lat: home.lat,
                         lng: home.lng
                     }
                 });
 
-                // sorting by price
-                console.log("Sorting by price");
-                filteredHomes.sort(sortByPrice);
+                // only fetch results if there are 10+ of each classification of homes in the desired zipcode
+                if (poorCnt > 9 && medCnt > 9 && richCnt > 9) {
+                    // sorting by price
+                    console.log("Sorting by price");
+                    filteredHomes.sort(sortByPrice);
 
-                // FIXME This is where we will do the data priming to show inequality.. figure out specifics from eunji
+                    // FIXME This is where we will do the data priming to show inequality.. figure out specifics from eunji
 
-                console.log(`Send ${filteredHomes.length} homes for ${req.params.zipcode} to ${req.session.respondent.respondentId}`)
-                res.status(200).send({
-                    homes: filteredHomes
-                });
+                    console.log(`Send ${filteredHomes.length} homes for ${req.params.zipcode} to ${req.session.respondent.respondentId}`)
+                    res.status(200).send({
+                        homes: filteredHomes
+                    });
+                } else {
+                    console.log(`Not enough homes with each classification in the zipcode ${req.params.zipcode}`);
+                    console.log("poor count: " + poorCnt + ", medium count: " + medCnt + ", rich count: " + richCnt);
+                    res.status(404).send({error: `Not enoough homes in zipcode: ${req.params.zipcode}`});
+                }
             }
         } else {
             console.log(`No user logged in, suspicious activity`);
