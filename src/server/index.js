@@ -86,7 +86,7 @@ const setupServer = async () => {
         //mongoose.set('sslCA', certFileBuf);
         mongoose.set('useFindAndModify', false);
         mongoose.set('useCreateIndex', true);
-        mongoose.set('useUnifiedTopology', false );
+        mongoose.set('useUnifiedTopology', true );
         const mongoUrl = (env === "dev") ? conf.mongodbLocal : conf.mongodb;
 
         await mongoose.connect(mongoUrl, options);
@@ -94,7 +94,7 @@ const setupServer = async () => {
         //await mongoose.connect(doc_db_url, options);
         console.log(`MongoDB connected: ${mongoUrl}`);
     } catch (err) {
-        console.log(err);
+        console.log("Connection ERROR: " + err);
         process.exit(-1);
     }
 
