@@ -1,9 +1,3 @@
-"use strict";
-
-/*
-This is the base component of the website
-*/
-
 import React, { useState } from "react";
 import styled from "styled-components";
 import { HouseCardList } from "./housecardlist";
@@ -154,7 +148,11 @@ export const HouseSearch = (props) => {
     if (experimentalGroup === 1) {
       while (counter < 10) {
         const rand = (keys.length * Math.random()) << 0;
-        if (homes[keys[rand]].classification === "rich" && !formattedHomes.some(e => e.address === homes[keys[rand]].address)) {
+        if (
+          homes[keys[rand]].classification === "rich" &&
+          !formattedHomes.some((e) => e.address === homes[keys[rand]].address)
+        ) {
+          // check for dups
           formattedHomes.push(homes[keys[rand]]);
           counter++;
         }
@@ -162,7 +160,10 @@ export const HouseSearch = (props) => {
     } else if (experimentalGroup === 2) {
       while (counter < 10) {
         const rand = (keys.length * Math.random()) << 0;
-        if (homes[keys[rand]].classification === "poor" && !formattedHomes.some(e => e.address === homes[keys[rand]].address)) { // check for dups
+        if (
+          homes[keys[rand]].classification === "poor" &&
+          !formattedHomes.some((e) => e.address === homes[keys[rand]].address)
+        ) {
           formattedHomes.push(homes[keys[rand]]);
           counter++;
         }
@@ -170,7 +171,10 @@ export const HouseSearch = (props) => {
     } else if (experimentalGroup === 3) {
       while (counter < 10) {
         const rand = (keys.length * Math.random()) << 0;
-        if (homes[keys[rand]].classification === "medium" && !formattedHomes.some(e => e.address === homes[keys[rand]].address)) {
+        if (
+          homes[keys[rand]].classification === "medium" &&
+          !formattedHomes.some((e) => e.address === homes[keys[rand]].address)
+        ) {
           formattedHomes.push(homes[keys[rand]]);
           counter++;
         }
@@ -178,14 +182,20 @@ export const HouseSearch = (props) => {
     } else if (experimentalGroup === 4) {
       while (counter < 5) {
         const rand = (keys.length * Math.random()) << 0;
-        if (homes[keys[rand]].classification === "rich" && !formattedHomes.some(e => e.address === homes[keys[rand]].address)) {
+        if (
+          homes[keys[rand]].classification === "rich" &&
+          !formattedHomes.some((e) => e.address === homes[keys[rand]].address)
+        ) {
           formattedHomes.push(homes[keys[rand]]);
           counter++;
         }
       }
       while (counter < 10) {
         const rand = (keys.length * Math.random()) << 0;
-        if (homes[keys[rand]].classification === "poor" && !formattedHomes.some(e => e.address === homes[keys[rand]].address)) {
+        if (
+          homes[keys[rand]].classification === "poor" &&
+          !formattedHomes.some((e) => e.address === homes[keys[rand]].address)
+        ) {
           formattedHomes.push(homes[keys[rand]]);
           counter++;
         }
@@ -237,7 +247,9 @@ export const HouseSearch = (props) => {
         }
       });
     });
-    alert('Thanks for your submission! You can close this window and return to the survey.');
+    alert(
+      "Thanks for your submission! You can close this window and return to the survey."
+    );
   };
 
   // for changing rating inputs
