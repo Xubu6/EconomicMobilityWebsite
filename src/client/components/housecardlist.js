@@ -11,7 +11,7 @@ import { HouseDetailsModal } from "./housedetailsmodal";
 let CardBase = styled.div`
   width: 18.5%;
   justify-content: flex-start;
-  height: 48%;
+  height: 47.5%;
   padding: 0.5%;
   border: 1px solid grey;
 `;
@@ -19,7 +19,7 @@ let CardBase = styled.div`
 let PrincipalImg = styled.img`
   position: relative;
   width: 100%;
-  height: 65%;
+  height: 60%;
   cursor: pointer;
 `;
 

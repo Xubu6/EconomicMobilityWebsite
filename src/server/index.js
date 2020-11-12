@@ -42,7 +42,7 @@ const setupServer = async () => {
     if (env !== "dev") {
         // this cert file is for connect to the document DB
         console.log("cert file loaded");
-        certFileBuf = fs.readFileSync(path.join(__dirname + './rds-combined-ca-bundle.pem'));
+        // certFileBuf = [fs.readFileSync("rds-combined-ca-bundle.pem")];
         options = {
             sslCA: certFileBuf
         };

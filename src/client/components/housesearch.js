@@ -13,7 +13,7 @@ const SearchBar = styled.form`
   display: flex;
   justify-content: right;
   width: 100%;
-  height: 4%;
+  height: 6%;
   overflow: hidden;
   padding-top: 10px;
   padding-bottom: 10px;
@@ -35,11 +35,11 @@ const FormInput2 = styled.select`
 const FormButton = styled.button`
   margin: 5px 5px;
   width: 12vw;
-  max-height: 2em;
+  max-height: 3em;
   background: #6495ed;
   border: none;
   border-radius: 5px;
-  line-height: 2em;
+  line-height: 3em;
   font-size: 0.8em;
 `;
 
@@ -59,8 +59,8 @@ const Label = styled.div`
   display: flex;
   justify-content: right;
   font-size: 14px;
-  height: 4%;
-  padding-top: 10px;
+  height: 6%;
+  padding-top: 15px;
   padding-bottom: 10px;
   margin-left: 5px;
 `;
