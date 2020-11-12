@@ -86,7 +86,7 @@ const setupServer = async () => {
         //mongoose.set('sslCA', certFileBuf);
         mongoose.set('useFindAndModify', false);
         mongoose.set('useCreateIndex', true);
-        mongoose.set('useUnifiedTopology', true );
+        mongoose.set('useUnifiedTopology', false );
         const mongoUrl = (env === "dev") ? conf.mongodbLocal : conf.mongodb;
 
         await mongoose.connect(mongoUrl, options);
