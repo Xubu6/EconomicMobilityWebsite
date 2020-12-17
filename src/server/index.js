@@ -42,9 +42,11 @@ const setupServer = async () => {
     if (env !== "dev") {
         // this cert file is for connect to the document DB
         console.log("cert file loaded");
-        // certFileBuf = [fs.readFileSync("rds-combined-ca-bundle.pem")];
+        certFileBuf = [fs.readFileSync("rds-combined-ca-bundle.pem")];
         options = {
-            sslCA: certFileBuf
+            ssl: true,
+            sslCA: certFileBuf,
+            sslValidate: true,
         };
     } else {
         console.log("env is dev");
@@ -82,9 +84,8 @@ const setupServer = async () => {
         // Dont want to see MongooseJS deprecation warnings
         mongoose.set('useNewUrlParser', true);
         //mongoose.set('ssl', true);
-        //mongoose.set('sslValidate', true);
-        //mongoose.set('sslCA', certFileBuf);
-        mongoose.set('useFindAndModify', false);
+        // mongoose.set('sslValidate', true)
+        // mongoose.set('useFindAndModify', false);
         mongoose.set('useCreateIndex', true);
         mongoose.set('useUnifiedTopology', true );
         const mongoUrl = (env === "dev") ? conf.mongodbLocal : conf.mongodb;
