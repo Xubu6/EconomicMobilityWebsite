@@ -51,7 +51,7 @@ let ClassificationInfoStyle = styled.div`
 let HomePriceStyle = styled.div`
   display: flex;
   float: left;
-  font-size: 24px;
+  font-size: 28px;
   font-weight: bold;
   text-align: left;
 `;
@@ -61,6 +61,13 @@ let AddressDetails = styled.div`
   text-align: left;
   font-size: 16px;
   margin-bottom: 15px;
+`;
+
+let TextStyle = styled.div`
+  justify-content: flex-end;
+  text-align: left;
+  font-size: 14px;
+  font-style: italic;
 `;
 
 let DetailedPhotosList = styled.div`
@@ -139,7 +146,7 @@ export const DetailedHouseCard = ({
   return (
     <CardBase>
       <Header>Photos</Header>
-      <br/>
+      <br />
       <DetailedPhotosList>
         <DetailedCardPhotoList photos={photos} />
       </DetailedPhotosList>

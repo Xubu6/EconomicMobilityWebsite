@@ -97,7 +97,7 @@ export const GoogleMapDisplay = ({ houses = "", setShow, setTargetHouse}) => {
                         lng={home.lng}
                         setShow={setShow}
                         setTargetHouse={setTargetHouse}
-                        text={i}
+                        text={i+1}
                     /> );
                 i++;
             }

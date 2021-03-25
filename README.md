@@ -22,11 +22,11 @@ I need to get you the Zillow pem file to ssh into the ec2. Remind me if you don'
 
 # Commands
 
-// file copy to the ec2
-scp -i "aws/zillow_project_key.pem" "homes.json" ec2-user@ec2-18-189-215-44.us-east-2.compute.amazonaws.com:/home/ec2-user/homes.json
+// file copy to the ec2 (no longer needed)
+scp -i ~/Downloads/housing-key.pem ec2-user@ec2-18-189-215-44.us-east-2.compute.amazonaws.com:/home/ec2-user/homes.json
 
 // ssh into ec2
-ssh -i "zillow_project_key.pem" ec2-user@ec2-18-189-215-44.us-east-2.compute.amazonaws.com
+ssh -i ~/Downloads/housing-key.pem ec2-user@ec2-18-189-215-44.us-east-2.compute.amazonaws.com
 
 
 // [from the ec2 instance] go into the mongo shell
@@ -35,6 +35,3 @@ mongo --ssl --host zillow-docdb-cluster.cluster-cuusjgphml3x.us-east-2.docdb.ama
 // run the website (must run both the commands, in this order.. webpack updates the react components)
 npx webpack
 npm start
-
-
-In order to route data securely from external ports to the ports this runs on, I used nginx. They have good documentation, if you need additional help let me know

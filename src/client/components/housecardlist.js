@@ -41,25 +41,45 @@ let HomeInfoStyle = styled.div`
 
 let HomePriceStyle = styled.div`
   float: left;
-  font-size: 18px;
+  font-size: 22px;
   font-weight: bolder;
 `;
 
 let AddressDetails = styled.div`
-    justify-content: flex-start;
-    float: left;
-    font-weight: bold;
-    font-size: 14px;
-    margin-top: 10px;
+  justify-content: flex-start;
+  float: left;
+  font-weight: bold;
+  font-size: 14px;
+  margin-top: 10px;
+`;
+
+let MapDetails = styled.div`
+  position: fixed;
+  padding-top: 30px;
+  margin-top: 30px;
+  justify-content: flex-start;
+  float: left;
+  font-size: 12px;
+`;
+
+let TextStyle = styled.div`
+  position: fixed;
+  padding-top: 40px;
+  margin-top: 40px;
+  justify-content: flex-start;
+  float: left;
+  font-size: 12px;
+  font-style: italic;
 `;
 
 let HomeDetails = ({
+  index,
   bedrooms,
   bathrooms,
   sqft,
   price,
   classification,
-  address
+  address,
 }) => {
   return (
     <CardDetails>
@@ -73,13 +93,18 @@ let HomeDetails = ({
         </HomeInfoStyle>
       </HomeDetailsStyle>
       <AddressDetails>{address.replace(/-/g, " ")}</AddressDetails>
+      <MapDetails>
+        Map Marker: <strong>{index + 1}</strong>
+      </MapDetails>
       {/* <div placement={"left"}>Classification: {classification}</div> */}
+      <TextStyle>Click the photo above to see more!</TextStyle>
     </CardDetails>
   );
 };
 
 // component for an individual HouseCard (single house listing)
 export const HouseCard = ({
+  index,
   _id,
   address,
   price,
@@ -120,6 +145,7 @@ export const HouseCard = ({
         }
       />
       <HomeDetails
+        index={index}
         bedrooms={bedrooms}
         bathrooms={bathrooms}
         sqft={sqft}
@@ -238,6 +264,7 @@ export const HouseCardList = ({
       return (
         <HouseCard
           key={i}
+          index={i}
           _id={houseInfo._id}
           address={houseInfo.address}
           price={houseInfo.price}

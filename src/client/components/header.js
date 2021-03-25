@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
@@ -24,7 +24,7 @@ const HeaderLeftBase = styled.div`
 const HeaderLeft = ({ user }) => {
     return (
         <HeaderLeftBase>
-            <h2>Get to Know Your Neighborhood!</h2>
+            <h2>Explore houses in your community and tell us your favorites!</h2>
         </HeaderLeftBase>
     );
 };

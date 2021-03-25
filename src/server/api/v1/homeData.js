@@ -146,7 +146,7 @@ module.exports = app => {
                 } else {
                     console.log(`Not enough homes with each classification in the zipcode ${req.params.zipcode}`);
                     console.log("poor count: " + poorCnt + ", medium count: " + medCnt + ", rich count: " + richCnt);
-                    res.status(404).send({error: `Not enoough homes in zipcode: ${req.params.zipcode}`});
+                    res.status(404).send({error: `Not enough homes in zipcode: ${req.params.zipcode}`});
                 }
             }
         } else {

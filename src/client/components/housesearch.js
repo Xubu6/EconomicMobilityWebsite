@@ -9,14 +9,24 @@ const LandingBase = styled.div`
   justify-content: right;
 `;
 
+const DescriptionStyle = styled.div`
+  position: absolute;
+  align-content: left;
+  text-align: left;
+  padding-top: 5px;
+  padding-left: 10px;
+  color: #191970;
+`;
+
 const SearchBar = styled.form`
   display: flex;
   justify-content: right;
   width: 100%;
-  height: 6%;
+  height: 5%;
   overflow: hidden;
-  padding-top: 10px;
+  padding-top: 45px;
   padding-bottom: 10px;
+  padding-left: 5px;
   border-bottom: 1px solid #b8b8b8;
 `;
 
@@ -100,6 +110,9 @@ export const HouseSearch = (props) => {
 
   const [searched, setSearched] = useState(false);
 
+  const [startTime, setStartTime] = useState(null);
+  const [endTime, setEndTime] = useState(null);
+
   // Called upon search button pressing
   let onSubmit = (ev) => {
     // this prevents the form from doing anything.. not really useful here I don't think
@@ -136,6 +149,7 @@ export const HouseSearch = (props) => {
         console.log(`Setting homes to be for zip ${zip}`);
         setError(false);
         setSearched(true);
+        setStartTime(new Date().getTime());
         const homes = formatHouses(data.homes); // format based on classification group
         setHouses(homes);
       });
@@ -215,41 +229,63 @@ export const HouseSearch = (props) => {
   // for rating submissions
   const handleSubmit = (ev) => {
     ev.preventDefault();
+    setEndTime(new Date().getTime());
 
-    const ratingData = {
-      respondentId: respondent,
-      classificationGroup: experimentalGroup,
-      zipcode: zip,
-      address1: address1,
-      classification1: classification1,
-      address2: address2,
-      classification2: classification2,
-      address3: address3,
-      classification3: classification3,
-      address4: address4,
-      classification4: classification4,
-    };
+    if (
+      address1 === "" ||
+      address2 === "" ||
+      address3 === "" ||
+      address4 === ""
+    ) {
+      alert("Please make sure to fill out your house selections!");
+    } else if (
+      address1 === address2 ||
+      address1 === address3 ||
+      address1 === address4 ||
+      address2 === address3 ||
+      address2 === address4 ||
+      address3 === address4
+    ) {
+      alert("Please make sure your choices do not overlap!");
+    } else if (endTime - startTime < 60000) {
+      // user must spend at least a minute before submitting
+      alert("Please spend more time exploring the houses before submitting.");
+    } else {
+      const ratingData = {
+        respondentId: respondent,
+        classificationGroup: experimentalGroup,
+        zipcode: zip,
+        address1: address1,
+        classification1: classification1,
+        address2: address2,
+        classification2: classification2,
+        address3: address3,
+        classification3: classification3,
+        address4: address4,
+        classification4: classification4,
+      };
 
-    console.log(JSON.stringify(ratingData));
+      console.log(JSON.stringify(ratingData));
 
-    fetch("/v1/rating", {
-      body: JSON.stringify(ratingData),
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-    }).then((res) => {
-      res.json().then((data) => {
-        if (res.ok) {
-          console.log(`Sent rating data for respondent: ${respondent}`);
-        } else {
-          console.log(`Rating error for respondentId: ${respondent}`);
-        }
+      fetch("/v1/rating", {
+        body: JSON.stringify(ratingData),
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+      }).then((res) => {
+        res.json().then((data) => {
+          if (res.ok) {
+            console.log(`Sent rating data for respondent: ${respondent}`);
+          } else {
+            console.log(`Rating error for respondentId: ${respondent}`);
+          }
+        });
       });
-    });
-    alert(
-      "Thanks for your submission! You can close this window and return to the survey."
-    );
+      alert(
+        "Thanks for your submission! You can close this window and return to the survey."
+      );
+    }
   };
 
   // for changing rating inputs
@@ -292,163 +328,180 @@ export const HouseSearch = (props) => {
     <LandingBase>
       <ErrorBase error={error} />
       {!searched ? (
-        <SearchBar>
-          <FormInput
-            id={"zip"}
-            placeholder="ZIP Code"
-            onChange={onChange}
-            value={zip}
-          />
-          <FormButton onClick={onSubmit}>Search</FormButton>
-        </SearchBar>
+        <div>
+          <DescriptionStyle>
+            We are now going to show you houses in your community. Please enter
+            your zip code.
+          </DescriptionStyle>
+          <SearchBar>
+            <FormInput
+              id={"zip"}
+              placeholder="ZIP Code"
+              onChange={onChange}
+              value={zip}
+            />
+            <FormButton onClick={onSubmit}>Search</FormButton>
+          </SearchBar>
+        </div>
       ) : (
-        <SearchBar>
-          <Label>Best:</Label>
-          <FormInput2 id={"1"} onChange={handleChange}>
-            <option value="" disabled selected hidden>
-              Please choose the best home...
-            </option>
-            <option value={houses ? houses[0].address : ""}>
-              {houses ? houses[0].address.replace(/-/g, " ") : ""}
-            </option>
-            <option value={houses ? houses[1].address : ""}>
-              {houses ? houses[1].address.replace(/-/g, " ") : ""}
-            </option>
-            <option value={houses ? houses[2].address : ""}>
-              {houses ? houses[2].address.replace(/-/g, " ") : ""}
-            </option>
-            <option value={houses ? houses[3].address : ""}>
-              {houses ? houses[3].address.replace(/-/g, " ") : ""}
-            </option>
-            <option value={houses ? houses[4].address : ""}>
-              {houses ? houses[4].address.replace(/-/g, " ") : ""}
-            </option>
-            <option value={houses ? houses[5].address : ""}>
-              {houses ? houses[5].address.replace(/-/g, " ") : ""}
-            </option>
-            <option value={houses ? houses[6].address : ""}>
-              {houses ? houses[6].address.replace(/-/g, " ") : ""}
-            </option>
-            <option value={houses ? houses[7].address : ""}>
-              {houses ? houses[7].address.replace(/-/g, " ") : ""}
-            </option>
-            <option value={houses ? houses[8].address : ""}>
-              {houses ? houses[8].address.replace(/-/g, " ") : ""}
-            </option>
-            <option value={houses ? houses[9].address : ""}>
-              {houses ? houses[9].address.replace(/-/g, " ") : ""}
-            </option>
-          </FormInput2>
-          <Label>2nd Best:</Label>
-          <FormInput2 id={"2"} onChange={handleChange}>
-            <option value="" disabled selected hidden>
-              Please choose the 2nd best home...
-            </option>
-            <option value={houses ? houses[0].address : ""}>
-              {houses ? houses[0].address.replace(/-/g, " ") : ""}
-            </option>
-            <option value={houses ? houses[1].address : ""}>
-              {houses ? houses[1].address.replace(/-/g, " ") : ""}
-            </option>
-            <option value={houses ? houses[2].address : ""}>
-              {houses ? houses[2].address.replace(/-/g, " ") : ""}
-            </option>
-            <option value={houses ? houses[3].address : ""}>
-              {houses ? houses[3].address.replace(/-/g, " ") : ""}
-            </option>
-            <option value={houses ? houses[4].address : ""}>
-              {houses ? houses[4].address.replace(/-/g, " ") : ""}
-            </option>
-            <option value={houses ? houses[5].address : ""}>
-              {houses ? houses[5].address.replace(/-/g, " ") : ""}
-            </option>
-            <option value={houses ? houses[6].address : ""}>
-              {houses ? houses[6].address.replace(/-/g, " ") : ""}
-            </option>
-            <option value={houses ? houses[7].address : ""}>
-              {houses ? houses[7].address.replace(/-/g, " ") : ""}
-            </option>
-            <option value={houses ? houses[8].address : ""}>
-              {houses ? houses[8].address.replace(/-/g, " ") : ""}
-            </option>
-            <option value={houses ? houses[9].address : ""}>
-              {houses ? houses[9].address.replace(/-/g, " ") : ""}
-            </option>
-          </FormInput2>
-          <Label>Worst:</Label>
-          <FormInput2 id={"4"} onChange={handleChange}>
-            <option value="" disabled selected hidden>
-              Please choose the worst home...
-            </option>
-            <option value={houses ? houses[0].address : ""}>
-              {houses ? houses[0].address.replace(/-/g, " ") : ""}
-            </option>
-            <option value={houses ? houses[1].address : ""}>
-              {houses ? houses[1].address.replace(/-/g, " ") : ""}
-            </option>
-            <option value={houses ? houses[2].address : ""}>
-              {houses ? houses[2].address.replace(/-/g, " ") : ""}
-            </option>
-            <option value={houses ? houses[3].address : ""}>
-              {houses ? houses[3].address.replace(/-/g, " ") : ""}
-            </option>
-            <option value={houses ? houses[4].address : ""}>
-              {houses ? houses[4].address.replace(/-/g, " ") : ""}
-            </option>
-            <option value={houses ? houses[5].address : ""}>
-              {houses ? houses[5].address.replace(/-/g, " ") : ""}
-            </option>
-            <option value={houses ? houses[6].address : ""}>
-              {houses ? houses[6].address.replace(/-/g, " ") : ""}
-            </option>
-            <option value={houses ? houses[7].address : ""}>
-              {houses ? houses[7].address.replace(/-/g, " ") : ""}
-            </option>
-            <option value={houses ? houses[8].address : ""}>
-              {houses ? houses[8].address.replace(/-/g, " ") : ""}
-            </option>
-            <option value={houses ? houses[9].address : ""}>
-              {houses ? houses[9].address.replace(/-/g, " ") : ""}
-            </option>
-          </FormInput2>
-          <Label>2nd Worst:</Label>
-          <FormInput2 id={"3"} onChange={handleChange}>
-            <option value="" disabled selected hidden>
-              Please choose the 2nd worst home...
-            </option>
-            <option value={houses ? houses[0].address : ""}>
-              {houses ? houses[0].address.replace(/-/g, " ") : ""}
-            </option>
-            <option value={houses ? houses[1].address : ""}>
-              {houses ? houses[1].address.replace(/-/g, " ") : ""}
-            </option>
-            <option value={houses ? houses[2].address : ""}>
-              {houses ? houses[2].address.replace(/-/g, " ") : ""}
-            </option>
-            <option value={houses ? houses[3].address : ""}>
-              {houses ? houses[3].address.replace(/-/g, " ") : ""}
-            </option>
-            <option value={houses ? houses[4].address : ""}>
-              {houses ? houses[4].address.replace(/-/g, " ") : ""}
-            </option>
-            <option value={houses ? houses[5].address : ""}>
-              {houses ? houses[5].address.replace(/-/g, " ") : ""}
-            </option>
-            <option value={houses ? houses[6].address : ""}>
-              {houses ? houses[6].address.replace(/-/g, " ") : ""}
-            </option>
-            <option value={houses ? houses[7].address : ""}>
-              {houses ? houses[7].address.replace(/-/g, " ") : ""}
-            </option>
-            <option value={houses ? houses[8].address : ""}>
-              {houses ? houses[8].address.replace(/-/g, " ") : ""}
-            </option>
-            <option value={houses ? houses[9].address : ""}>
-              {houses ? houses[9].address.replace(/-/g, " ") : ""}
-            </option>
-          </FormInput2>
-          <FormButton onClick={handleSubmit}>Submit Ratings</FormButton>
-        </SearchBar>
+        <div>
+          <DescriptionStyle>
+            We are interested in what you think about these houses in your
+            community. Below, you see ten different houses, each with their own
+            features. When you click a photo of a house or its map marker, you
+            will see more photos of the same house (i.e. its interiors, outdoor
+            space). <strong>Please explore all ten houses.</strong> Then, tell
+            us your <strong>two favorite houses</strong> and your{" "}
+            <strong>two least favorite houses.</strong>
+          </DescriptionStyle>
+          <SearchBar>
+            <Label>Best:</Label>
+            <FormInput2 id={"1"} onChange={handleChange}>
+              <option value="" disabled selected hidden>
+                Please choose the best home...
+              </option>
+              <option value={houses ? houses[0].address : ""}>
+                {houses ? houses[0].address.replace(/-/g, " ") : ""}
+              </option>
+              <option value={houses ? houses[1].address : ""}>
+                {houses ? houses[1].address.replace(/-/g, " ") : ""}
+              </option>
+              <option value={houses ? houses[2].address : ""}>
+                {houses ? houses[2].address.replace(/-/g, " ") : ""}
+              </option>
+              <option value={houses ? houses[3].address : ""}>
+                {houses ? houses[3].address.replace(/-/g, " ") : ""}
+              </option>
+              <option value={houses ? houses[4].address : ""}>
+                {houses ? houses[4].address.replace(/-/g, " ") : ""}
+              </option>
+              <option value={houses ? houses[5].address : ""}>
+                {houses ? houses[5].address.replace(/-/g, " ") : ""}
+              </option>
+              <option value={houses ? houses[6].address : ""}>
+                {houses ? houses[6].address.replace(/-/g, " ") : ""}
+              </option>
+              <option value={houses ? houses[7].address : ""}>
+                {houses ? houses[7].address.replace(/-/g, " ") : ""}
+              </option>
+              <option value={houses ? houses[8].address : ""}>
+                {houses ? houses[8].address.replace(/-/g, " ") : ""}
+              </option>
+              <option value={houses ? houses[9].address : ""}>
+                {houses ? houses[9].address.replace(/-/g, " ") : ""}
+              </option>
+            </FormInput2>
+            <Label>2nd Best:</Label>
+            <FormInput2 id={"2"} onChange={handleChange}>
+              <option value="" disabled selected hidden>
+                Please choose the 2nd best home...
+              </option>
+              <option value={houses ? houses[0].address : ""}>
+                {houses ? houses[0].address.replace(/-/g, " ") : ""}
+              </option>
+              <option value={houses ? houses[1].address : ""}>
+                {houses ? houses[1].address.replace(/-/g, " ") : ""}
+              </option>
+              <option value={houses ? houses[2].address : ""}>
+                {houses ? houses[2].address.replace(/-/g, " ") : ""}
+              </option>
+              <option value={houses ? houses[3].address : ""}>
+                {houses ? houses[3].address.replace(/-/g, " ") : ""}
+              </option>
+              <option value={houses ? houses[4].address : ""}>
+                {houses ? houses[4].address.replace(/-/g, " ") : ""}
+              </option>
+              <option value={houses ? houses[5].address : ""}>
+                {houses ? houses[5].address.replace(/-/g, " ") : ""}
+              </option>
+              <option value={houses ? houses[6].address : ""}>
+                {houses ? houses[6].address.replace(/-/g, " ") : ""}
+              </option>
+              <option value={houses ? houses[7].address : ""}>
+                {houses ? houses[7].address.replace(/-/g, " ") : ""}
+              </option>
+              <option value={houses ? houses[8].address : ""}>
+                {houses ? houses[8].address.replace(/-/g, " ") : ""}
+              </option>
+              <option value={houses ? houses[9].address : ""}>
+                {houses ? houses[9].address.replace(/-/g, " ") : ""}
+              </option>
+            </FormInput2>
+            <Label>Worst:</Label>
+            <FormInput2 id={"4"} onChange={handleChange}>
+              <option value="" disabled selected hidden>
+                Please choose the worst home...
+              </option>
+              <option value={houses ? houses[0].address : ""}>
+                {houses ? houses[0].address.replace(/-/g, " ") : ""}
+              </option>
+              <option value={houses ? houses[1].address : ""}>
+                {houses ? houses[1].address.replace(/-/g, " ") : ""}
+              </option>
+              <option value={houses ? houses[2].address : ""}>
+                {houses ? houses[2].address.replace(/-/g, " ") : ""}
+              </option>
+              <option value={houses ? houses[3].address : ""}>
+                {houses ? houses[3].address.replace(/-/g, " ") : ""}
+              </option>
+              <option value={houses ? houses[4].address : ""}>
+                {houses ? houses[4].address.replace(/-/g, " ") : ""}
+              </option>
+              <option value={houses ? houses[5].address : ""}>
+                {houses ? houses[5].address.replace(/-/g, " ") : ""}
+              </option>
+              <option value={houses ? houses[6].address : ""}>
+                {houses ? houses[6].address.replace(/-/g, " ") : ""}
+              </option>
+              <option value={houses ? houses[7].address : ""}>
+                {houses ? houses[7].address.replace(/-/g, " ") : ""}
+              </option>
+              <option value={houses ? houses[8].address : ""}>
+                {houses ? houses[8].address.replace(/-/g, " ") : ""}
+              </option>
+              <option value={houses ? houses[9].address : ""}>
+                {houses ? houses[9].address.replace(/-/g, " ") : ""}
+              </option>
+            </FormInput2>
+            <Label>2nd Worst:</Label>
+            <FormInput2 id={"3"} onChange={handleChange}>
+              <option value="" disabled selected hidden>
+                Please choose the 2nd worst home...
+              </option>
+              <option value={houses ? houses[0].address : ""}>
+                {houses ? houses[0].address.replace(/-/g, " ") : ""}
+              </option>
+              <option value={houses ? houses[1].address : ""}>
+                {houses ? houses[1].address.replace(/-/g, " ") : ""}
+              </option>
+              <option value={houses ? houses[2].address : ""}>
+                {houses ? houses[2].address.replace(/-/g, " ") : ""}
+              </option>
+              <option value={houses ? houses[3].address : ""}>
+                {houses ? houses[3].address.replace(/-/g, " ") : ""}
+              </option>
+              <option value={houses ? houses[4].address : ""}>
+                {houses ? houses[4].address.replace(/-/g, " ") : ""}
+              </option>
+              <option value={houses ? houses[5].address : ""}>
+                {houses ? houses[5].address.replace(/-/g, " ") : ""}
+              </option>
+              <option value={houses ? houses[6].address : ""}>
+                {houses ? houses[6].address.replace(/-/g, " ") : ""}
+              </option>
+              <option value={houses ? houses[7].address : ""}>
+                {houses ? houses[7].address.replace(/-/g, " ") : ""}
+              </option>
+              <option value={houses ? houses[8].address : ""}>
+                {houses ? houses[8].address.replace(/-/g, " ") : ""}
+              </option>
+              <option value={houses ? houses[9].address : ""}>
+                {houses ? houses[9].address.replace(/-/g, " ") : ""}
+              </option>
+            </FormInput2>
+            <FormButton onClick={handleSubmit}>Submit Ratings</FormButton>
+          </SearchBar>
+        </div>
       )}
       <ContentRow>
         <GoogleMapDisplay
