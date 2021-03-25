@@ -34,7 +34,7 @@ const setupServer = async () => {
     const env = process.env.NODE_ENV ? process.env.NODE_ENV : "dev";
 
     const conf = await envConfig("./config/config.json", env);
-    const port = process.env.PORT ? process.env.PORT : conf.port;
+    const port = process.env.PORT ? process.env.PORT : 8080;
 
     let certFileBuf;
     let options;
@@ -88,7 +88,8 @@ const setupServer = async () => {
         // mongoose.set('useFindAndModify', false);
         mongoose.set('useCreateIndex', true);
         mongoose.set('useUnifiedTopology', true );
-        const mongoUrl = (env === "dev") ? conf.mongodbLocal : conf.mongodb;
+        const mongodb = "mongodb://ZillowProjUser:ZillowProjPass@zillow-docdb-cluster.cuusjgphml3x.us-east-2.docdb.amazonaws.com:27017/zillow?ssl=true&ssl_ca_certs=rds-combined-ca-bundle.pem&retryWrites=false";
+        const mongoUrl = (env === "dev") ? conf.mongodbLocal : mongodb;
 
         await mongoose.connect(mongoUrl, options);
 
