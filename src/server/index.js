@@ -33,8 +33,8 @@ const setupServer = async () => {
 
     const env = process.env.NODE_ENV ? process.env.NODE_ENV : "dev";
 
-    //const conf = await envConfig("./config/config.json", env);
-    const port = process.env.PORT ? process.env.PORT : 8080;
+    const conf = await envConfig("./config/config.json", env);
+    const port = process.env.PORT ? process.env.PORT : conf.port;
 
     let certFileBuf;
     let options;
@@ -88,9 +88,7 @@ const setupServer = async () => {
         // mongoose.set('useFindAndModify', false);
         mongoose.set('useCreateIndex', true);
         mongoose.set('useUnifiedTopology', true );
-        const mongodb = "mongodb://ZillowProjUser:ZillowProjPass@zillow-docdb-cluster.cuusjgphml3x.us-east-2.docdb.amazonaws.com:27017/zillow?ssl=true&ssl_ca_certs=rds-combined-ca-bundle.pem&retryWrites=false";
-        const mongodbLocal = "mongodb://127.0.0.1:27017/zillow";
-        const mongoUrl = (env === "dev") ? mongodbLocal : mongodb;
+        const mongoUrl = (env === "dev") ? conf.mongodbLocal : conf.mongodb;
 
         await mongoose.connect(mongoUrl, options);
 
@@ -141,9 +139,9 @@ const setupServer = async () => {
     let server;
     if (env === "production") {
         const options = {
-            key: fs.readFileSync("/etc/letsencrypt/live/studier.me/privkey.pem"),
-            cert: fs.readFileSync("/etc/letsencrypt/live/studier.me/fullchain.pem"),
-            ca: fs.readFileSync("/etc/letsencrypt/live/studier.me/chain.pem")
+            key: fs.readFileSync(conf.security.keyPath),
+            cert: fs.readFileSync(conf.security.certPath),
+            ca: fs.readFileSync(conf.security.caPath)
         };
         // Listen for HTTPS requests
         server = https.createServer(options, app).listen(port, () => {
