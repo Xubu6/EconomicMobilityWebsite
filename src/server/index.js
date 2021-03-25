@@ -33,7 +33,7 @@ const setupServer = async () => {
 
     const env = process.env.NODE_ENV ? process.env.NODE_ENV : "dev";
 
-    const conf = envConfig("../../config/config.json", env);
+    const conf = await envConfig("./config/config.json", env);
     const port = process.env.PORT ? process.env.PORT : conf.port;
 
     let certFileBuf;
@@ -42,7 +42,7 @@ const setupServer = async () => {
     if (env !== "dev") {
         // this cert file is for connect to the document DB
         console.log("cert file loaded");
-        certFileBuf = [fs.readFileSync('./rds-combined-ca-bundle.pem')];
+        certFileBuf = [fs.readFileSync("rds-combined-ca-bundle.pem")];
         options = {
             ssl: true,
             sslCA: certFileBuf,
@@ -88,7 +88,7 @@ const setupServer = async () => {
         // mongoose.set('useFindAndModify', false);
         mongoose.set('useCreateIndex', true);
         mongoose.set('useUnifiedTopology', true );
-        const mongoUrl = (env === "dev") ? "mongodb://127.0.0.1:27017/zillow" : conf.mongodb;
+        const mongoUrl = (env === "dev") ? conf.mongodbLocal : conf.mongodb;
 
         await mongoose.connect(mongoUrl, options);
 
