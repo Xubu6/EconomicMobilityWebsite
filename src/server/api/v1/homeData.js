@@ -78,7 +78,8 @@ module.exports = app => {
         if (req.session.respondent) {
             let Home = await app.models.Home.findOne({
                 zip: req.params.zipcode.toLowerCase(),
-                //  $and: [ { $where: "this.jamestangCategory == this.ancherliCategory"}, {jamestangCategory: { $in: [ "rich", "medium", "poor" ] }}]
+                // $and: [ { $where: "this.jamestangCategory == this.ancherliCategory"}, {jamestangCategory: { $in: [ "rich", "medium", "poor" ] }}]
+                // syntax not supported
             });
             console.log(Home)
             if (!Home)
@@ -100,7 +101,8 @@ module.exports = app => {
             let homes = await app.models.Home.find({
                 zip: req.params.zipcode.toLowerCase(),
                 // following filter is to only query for housing entries where james and ancher categories both exist and are equal and are poor, rich, or medium
-                //  $and: [{ $where: "this.jamestangCategory == this.ancherliCategory"}, { jamestangCategory: { $in: [ "rich", "medium", "poor" ] }}]
+                // $and: [{ $where: "this.jamestangCategory == this.ancherliCategory"}, { jamestangCategory: { $in: [ "rich", "medium", "poor" ] }}]
+                // syntax not supported for Amazon DocumentDB
             });
 
             if (!homes || homes.length === 0) {
@@ -136,8 +138,6 @@ module.exports = app => {
                     // sorting by price
                     console.log("Sorting by price");
                     filteredHomes.sort(sortByPrice);
-
-                    // FIXME This is where we will do the data priming to show inequality.. figure out specifics from eunji
 
                     console.log(`Send ${filteredHomes.length} homes for ${req.params.zipcode} to ${req.session.respondent.respondentId}`)
                     res.status(200).send({
