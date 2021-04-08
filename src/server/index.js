@@ -33,7 +33,7 @@ const setupServer = async () => {
 
     const env = process.env.NODE_ENV ? process.env.NODE_ENV : "dev";
 
-    const conf = await envConfig("./config/config.json", env);
+    const conf = await envConfig("../../config/config.json", env);
     const port = process.env.PORT ? process.env.PORT : conf.port;
 
     let certFileBuf;
