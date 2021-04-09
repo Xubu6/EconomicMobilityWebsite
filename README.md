@@ -26,8 +26,13 @@ I need to get you the Zillow pem file to ssh into the ec2. Remind me if you don'
 scp -i ~/Downloads/housing-key.pem ec2-user@ec2-18-189-215-44.us-east-2.compute.amazonaws.com:/home/ec2-user/homes.json
 
 // ssh into ec2
-ssh -i ~/Downloads/housing-key.pem ec2-user@ec2-18-189-215-44.us-east-2.compute.amazonaws.com
+ssh -i "housing-key.pem" ubuntu@ec2-3-22-99-180.us-east-2.compute.amazonaws.com
 
+// to download rds pem file
+wget https://s3.amazonaws.com/rds-downloads/rds-combined-ca-bundle.pem
+
+// start the server in production (from EC2)
+NODE_ENV=prod pm2 start index.js 
 
 // [from the ec2 instance] go into the mongo shell
 mongo --ssl --host zillow-docdb-cluster.cluster-cuusjgphml3x.us-east-2.docdb.amazonaws.com:27017 --sslCAFile rds-combined-ca-bundle.pem --username ZillowProjUser --password ZillowProjPass
