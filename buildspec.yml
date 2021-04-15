@@ -17,10 +17,7 @@ phases:
 
 artifacts:
   files:
-    - 'node_modules/**/*'
-    - 'public/**/*'
-    - 'src/**/*'
-    - 'package.json'
+    - '**/*'
 
 cache:
   paths:

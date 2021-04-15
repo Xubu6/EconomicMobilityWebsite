@@ -41,6 +41,11 @@ const http = require('http');
 const port = normalizePort(config.PORT);
 app.set('port', port);
 
+if (config.PRODUCTION) {
+    // Setting the app to know that it is behind a local proxy, this sets the remote address to the req address
+    app.set('trust proxy', '127.0.0.1');
+}
+
 /**
  * Create HTTP server.
  */
