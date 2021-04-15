@@ -3,10 +3,13 @@
  **/
 
 const express = require("express");
+const mongoose = require('mongoose');
 
 const bodyParser = require("body-parser");
 const logger = require("morgan");
+
 const session = require("express-session");
+const MongoStore = require("connect-mongo");
 
 const path = require("path");
 const config = require('../config');
@@ -22,10 +25,14 @@ app.use(bodyParser.json());
 
 // Sessions support
 app.use(session({
-    name: "session",
+    name: "auth.id",
     secret: config.SESSION_SECRET,
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
+    proxy: config.PRODUCTION,
+    store: new MongoStore({
+        mongoUrl: config.MONGODB_URI
+    }),
     cookie: {
         path: "/",
         httpOnly: true,

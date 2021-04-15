@@ -42,8 +42,11 @@ const port = normalizePort(config.PORT);
 app.set('port', port);
 
 if (config.PRODUCTION) {
+    const enforce = require('express-sslify');
+
     // Setting the app to know that it is behind a local proxy, this sets the remote address to the req address
-    app.set('trust proxy', '127.0.0.1');
+    app.set('trust proxy', true);
+    app.use(enforce.HTTPS({trustProtoHeader: true}));
 }
 
 /**
