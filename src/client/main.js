@@ -7,6 +7,8 @@ import {Login} from "./components/login";
 import {HouseSearch} from "./components/housesearch";
 import {Header} from "./components/header";
 
+import axios from "axios";
+
 
 const GridBase = styled.div`
   display: grid;
@@ -32,10 +34,9 @@ const GridBase = styled.div`
 class MyApp extends Component {
     constructor(props) {
         super(props);
+
         // If the user has logged in, grab info from sessionStorage
-        const data = window.__PRELOADED_STATE__;
-        this.state = (data.respondentId) ? data : {};
-        console.log(`Starting as respondent: ${this.state.respondent}`);
+        this.state = window.__PRELOADED_STATE__;
 
         // just gotta do this cause React
         this.loggedIn = this.loggedIn.bind(this);
@@ -45,7 +46,7 @@ class MyApp extends Component {
 
     // is the respondent logged in?
     loggedIn() {
-        return this.state.respondentId && this.state.experimentalGroup;
+        return this.state.respondentId;
     }
 
     // Log a respondent in
@@ -53,26 +54,23 @@ class MyApp extends Component {
         console.log(`called login function with ${respondentId}`);
 
         // backend call to log a respondent in
-        fetch(`/v1/respondent/${respondentId}`)
-            .then(res => res.json())
-            .then(res => {
-                // puts the respondent info in the state, so we know they're logged in
-                this.setState(res.respondent);
-            })
-            .catch(() => {
-                alert("An unexpected error occurred.");
-                this.logOut();
-            });
+        axios.post('/api/respondent/login', {
+            respondentId
+        }).then(res => {
+            this.setState(res.data);
+        }).catch(err => {
+            alert("An unexpected error occurred.");
+            console.log(err);
+        });
     }
 
     logOut() {
-        fetch("/v1/respondent", {
-            method: "DELETE",
-            credentials: "include"
-        }).then(() => {
-            // Reset user state
-            // this.setState(defaultUser);
+        // backend call to log a respondent out
+        axios.post('/api/respondent/logout', {}).then(res => {
+            this.setState(null);
+        }).catch(err => {
             alert("An unexpected error occurred.");
+            console.log(err);
         });
     }
 
@@ -86,7 +84,7 @@ class MyApp extends Component {
                     // if loggedIn, display the search menu
                     // if not, show login page
                     this.loggedIn() ?
-                        (<HouseSearch {...props} respondentId={this.state.respondentId} experimentalGroup={this.state.experimentalGroup}/>):
+                        (<HouseSearch {...props} respondentId={this.state.respondentId}/>):
                         (<Login {...props} logIn={this.logIn}/>)
                 }/>
             </BrowserRouter>

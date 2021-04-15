@@ -7,3 +7,4 @@ public/js/vendor.*
 
 /public/testImages/*
 /public/images/*
+.env

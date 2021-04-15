@@ -1,16 +1,20 @@
 {
-  "name": "zillowProj",
+  "name": "neighborhood-explorer",
   "version": "1.0.0",
-  "description": "Zillow Project",
+  "description": "MAIL Neighborhood Explorer Inequality Project",
   "main": "/src/server/index.js",
   "dependencies": {
     "@babel/polyfill": "^7.11.5",
     "@hapi/joi": "^16.1.8",
+    "axios": "^0.21.1",
     "body-parser": "^1.19.0",
     "connect-redis": "^4.0.3",
+    "debug": "^4.3.1",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-session": "^1.17.1",
     "google-map-react": "^1.1.7",
+    "joi": "^17.4.0",
     "loadtest": "^5.0.4",
     "md5": "^2.3.0",
     "mongoose": "^5.10.2",
@@ -38,13 +42,7 @@
   },
   "scripts": {
     "build": "webpack",
-    "start": "node ./src/server/index.js",
-    "run": "npx nodemon ./src/server/index.js",
-    "temp": "npx webpack ./src/server/index.js",
-    "start-test": "cross-env NODE_ENV=test node ./src/server/index.js",
-    "start-travis": "cross-env NODE_ENV=travis node ./src/server/index.js",
-    "test": "cross-env NODE_ENV=test mocha --recursive",
-    "test-travis": "cross-env NODE_ENV=travis mocha --recursive"
+    "start": "node src/server/index.js"
   },
   "author": "D. Ryan",
   "license": "ISC",

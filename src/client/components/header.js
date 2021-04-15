@@ -7,7 +7,7 @@ const fontColor = "#006aff";
 
 const HeaderLeftBase = styled.div`
   flex-grow: 1;
-  font-style: bold;
+  font-weight: bold;
   & > h2 {
     color: ${fontColor};
     margin: 0.75em 0 0.75em 0.5em;

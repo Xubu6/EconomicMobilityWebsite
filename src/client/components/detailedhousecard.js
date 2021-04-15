@@ -2,7 +2,6 @@ import styled from "styled-components";
 import React, { useState } from "react";
 import { DetailedCardPhotoList } from "./detailedcardphotolist";
 import { Button } from "react-bootstrap";
-import { Classification } from "./classification";
 
 let CardBase = styled.div`
   display: flex;
