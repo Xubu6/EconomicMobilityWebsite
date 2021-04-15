@@ -36,7 +36,8 @@ app.use(session({
     cookie: {
         path: "/",
         httpOnly: true,
-        secure: config.PRODUCTION
+        secure: config.PRODUCTION,
+        domain: config.SESSION_DOMAIN
     }
 }));
 
