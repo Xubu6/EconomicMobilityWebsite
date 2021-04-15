@@ -1,0 +1,28 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 15.7
+    commands:
+      - echo Installing dependencies...
+      - yarn install
+  build:
+    commands:
+      - echo Building project...
+      - yarn build
+  post_build:
+    commands:
+      - echo build completed on `date`
+
+artifacts:
+  files:
+    - 'node_modules/**/*'
+    - 'public/**/*'
+    - 'src/**/*'
+    - 'package.json'
+
+cache:
+  paths:
+    - '/root/.npm/**/*'
+    - '/node_modules/'

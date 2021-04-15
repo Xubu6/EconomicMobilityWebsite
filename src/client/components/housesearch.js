@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import styled from "styled-components";
-import { HouseCardList } from "./housecardlist";
-import { GoogleMapDisplay } from "./googlemapdisplay";
+import {HouseCardList} from "./housecardlist";
+import {GoogleMapDisplay} from "./googlemapdisplay";
+import axios from "axios";
 
 /*************************************************************************/
 
@@ -10,7 +11,7 @@ const LandingBase = styled.div`
 `;
 
 const DescriptionStyle = styled.div`
-  position: absolute;
+  position: relative;
   align-content: left;
   text-align: left;
   padding-top: 5px;
@@ -75,453 +76,249 @@ const Label = styled.div`
   margin-left: 5px;
 `;
 
-const ErrorBase = ({ error }) => {
-  return error ? <Error>Entered zip code is invalid</Error> : <div />;
+const ErrorBase = ({error}) => {
+    return error ? <Error>Entered zip code is invalid</Error> : <div/>;
 };
 
 export const HouseSearch = (props) => {
-  // full search results for houses within the zip code
-  const [houses, setHouses] = useState(null);
+    // full search results for houses within the zip code
+    const [houses, setHouses] = useState(null);
 
-  // boolean for showing a detailed house card
-  const [show, setShow] = useState(false);
+    // boolean for showing a detailed house card
+    const [show, setShow] = useState(false);
 
-  // target house for the detailed house card
-  const [targetHouse, setTargetHouse] = useState(null);
+    // target house for the detailed house card
+    const [targetHouse, setTargetHouse] = useState(null);
 
-  // zipcode that is being searched
-  const [zip, setZip] = useState("");
+    // zipcode that is being searched
+    const [zip, setZip] = useState("");
 
-  // Error for nonexistent zip code
-  const [error, setError] = useState(false);
+    // Error for nonexistent zip code
+    const [error, setError] = useState(false);
 
-  const respondent = props.respondentId; // the current respondent
+    const respondent = props.respondentId; // the current respondent
 
-  const experimentalGroup = props.experimentalGroup;
+    const [address1, setAddress1] = useState("");
+    const [address2, setAddress2] = useState("");
+    const [address3, setAddress3] = useState("");
+    const [address4, setAddress4] = useState("");
 
-  const [address1, setAddress1] = useState("");
-  const [classification1, setClassification1] = useState("");
-  const [address2, setAddress2] = useState("");
-  const [classification2, setClassification2] = useState("");
-  const [address3, setAddress3] = useState("");
-  const [classification3, setClassification3] = useState("");
-  const [address4, setAddress4] = useState("");
-  const [classification4, setClassification4] = useState("");
+    const [searched, setSearched] = useState(false);
 
-  const [searched, setSearched] = useState(false);
+    const [startTime, setStartTime] = useState(null);
 
-  const [startTime, setStartTime] = useState(null);
-  const [endTime, setEndTime] = useState(null);
+    // Called upon search button pressing
+    let onSubmit = (ev) => {
+        // this prevents the form from doing anything.. not really useful here I don't think
+        ev.preventDefault();
 
-  // Called upon search button pressing
-  let onSubmit = (ev) => {
-    // this prevents the form from doing anything.. not really useful here I don't think
-    ev.preventDefault();
+        console.log(`Zip to be searched for ${zip}`);
 
-    console.log(`Zip to be searched for ${zip}`);
-
-    if (zip === "") {
-      return;
-    }
-
-    // backend data requests for this zip
-    fetch(`/v1/homeData/${zip}`, {
-      // body: JSON.stringify({
-      //     username: 'doesnt',
-      //     password: 'matter',
-      //     zip: document.getElementById("zip").value
-      // }),
-      method: "GET",
-      credentials: "include",
-      headers: {
-        "content-type": "application/json",
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.error) {
-          console.log(`Error on house data request: ${data.error}`);
-          setError(true);
-          setSearched(false);
-          return; // FIXME change to show an error message to the user
+        if (zip === "") {
+            return;
         }
 
-        console.log(`Setting homes to be for zip ${zip}`);
-        setError(false);
-        setSearched(true);
-        setStartTime(new Date().getTime());
-        const homes = formatHouses(data.homes); // format based on classification group
-        setHouses(homes);
-      });
-  };
+        // backend data requests for this zip
+        axios.get(`/api/home/${ zip }`, {
+            withCredentials: true
+        }).then(res => {
+            console.log(`Setting homes to be for zip ${zip}`);
 
-  const formatHouses = (homes) => {
-    let counter = 0;
-    const keys = Object.keys(homes);
-    let formattedHomes = [];
-    if (experimentalGroup === 1) {
-      while (counter < 10) {
-        const rand = (keys.length * Math.random()) << 0;
-        if (
-          homes[keys[rand]].classification === "rich" &&
-          !formattedHomes.some((e) => e.address === homes[keys[rand]].address)
-        ) {
-          // check for dups
-          formattedHomes.push(homes[keys[rand]]);
-          counter++;
-        }
-      }
-    } else if (experimentalGroup === 2) {
-      while (counter < 10) {
-        const rand = (keys.length * Math.random()) << 0;
-        if (
-          homes[keys[rand]].classification === "poor" &&
-          !formattedHomes.some((e) => e.address === homes[keys[rand]].address)
-        ) {
-          formattedHomes.push(homes[keys[rand]]);
-          counter++;
-        }
-      }
-    } else if (experimentalGroup === 3) {
-      while (counter < 10) {
-        const rand = (keys.length * Math.random()) << 0;
-        if (
-          homes[keys[rand]].classification === "medium" &&
-          !formattedHomes.some((e) => e.address === homes[keys[rand]].address)
-        ) {
-          formattedHomes.push(homes[keys[rand]]);
-          counter++;
-        }
-      }
-    } else if (experimentalGroup === 4) {
-      while (counter < 5) {
-        const rand = (keys.length * Math.random()) << 0;
-        if (
-          homes[keys[rand]].classification === "rich" &&
-          !formattedHomes.some((e) => e.address === homes[keys[rand]].address)
-        ) {
-          formattedHomes.push(homes[keys[rand]]);
-          counter++;
-        }
-      }
-      while (counter < 10) {
-        const rand = (keys.length * Math.random()) << 0;
-        if (
-          homes[keys[rand]].classification === "poor" &&
-          !formattedHomes.some((e) => e.address === homes[keys[rand]].address)
-        ) {
-          formattedHomes.push(homes[keys[rand]]);
-          counter++;
-        }
-      }
-      formattedHomes.sort(() => Math.random() - 0.5); // randomize the order so it isn't 5 rich then 5 poor
-    }
-    return formattedHomes;
-  };
+            setError(false);
+            setSearched(true);
 
-  const onChange = (ev) => {
-    if (ev.target.id === "zip") {
-      console.log(`Setting zip to ${ev.target.value}`);
-      setZip(ev.target.value);
-    }
-  };
+            setStartTime(new Date().getTime());
 
-  // for rating submissions
-  const handleSubmit = (ev) => {
-    ev.preventDefault();
-    setEndTime(new Date().getTime());
+            setHouses(res.data.homes);
+        }).catch(err => {
+            console.log(err);
 
-    if (
-      address1 === "" ||
-      address2 === "" ||
-      address3 === "" ||
-      address4 === ""
-    ) {
-      alert("Please make sure to fill out your house selections!");
-    } else if (
-      address1 === address2 ||
-      address1 === address3 ||
-      address1 === address4 ||
-      address2 === address3 ||
-      address2 === address4 ||
-      address3 === address4
-    ) {
-      alert("Please make sure your choices do not overlap!");
-    } else if (endTime - startTime < 60000) {
-      // user must spend at least a minute before submitting
-      alert("Please spend more time exploring the houses before submitting.");
-    } else {
-      const ratingData = {
-        respondentId: respondent,
-        classificationGroup: experimentalGroup,
-        zipcode: zip,
-        address1: address1,
-        classification1: classification1,
-        address2: address2,
-        classification2: classification2,
-        address3: address3,
-        classification3: classification3,
-        address4: address4,
-        classification4: classification4,
-      };
-
-      console.log(JSON.stringify(ratingData));
-
-      fetch("/v1/rating", {
-        body: JSON.stringify(ratingData),
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-        },
-      }).then((res) => {
-        res.json().then((data) => {
-          if (res.ok) {
-            console.log(`Sent rating data for respondent: ${respondent}`);
-          } else {
-            console.log(`Rating error for respondentId: ${respondent}`);
-          }
+            setError(true);
+            setSearched(false);
         });
-      });
-      alert(
-        "Thanks for your submission! You can close this window and return to the survey."
-      );
-    }
-  };
+    };
 
-  // for changing rating inputs
-  const handleChange = (ev) => {
-    const targetAddress = ev.target.value.replace(/ /g, "-");
-    let classification = "";
-    if (ev.target.id === "1") {
-      setAddress1(targetAddress);
-      for (let house in houses) {
-        if (houses[house].address === targetAddress)
-          classification = houses[house].classification;
-      }
-      setClassification1(classification);
-      console.log(`Current State: ${address1}, ${classification1}`);
-    } else if (ev.target.id === "2") {
-      setAddress2(targetAddress);
-      for (let house in houses) {
-        if (houses[house].address === targetAddress)
-          classification = houses[house].classification;
-      }
-      setClassification2(classification);
-    } else if (ev.target.id === "3") {
-      setAddress3(targetAddress);
-      for (let house in houses) {
-        if (houses[house].address === targetAddress)
-          classification = houses[house].classification;
-      }
-      setClassification3(classification);
-    } else if (ev.target.id === "4") {
-      setAddress4(targetAddress);
-      for (let house in houses) {
-        if (houses[house].address === targetAddress)
-          classification = houses[house].classification;
-      }
-      setClassification4(classification);
-    }
-  };
+    const onChange = (ev) => {
+        if (ev.target.id === "zip") {
+            console.log(`Setting zip to ${ev.target.value}`);
+            setZip(ev.target.value);
+        }
+    };
 
-  return (
-    <LandingBase>
-      <ErrorBase error={error} />
-      {!searched ? (
-        <div>
-          <DescriptionStyle>
-            We are now going to show you houses in your community. Please enter
-            your zip code.
-          </DescriptionStyle>
-          <SearchBar>
-            <FormInput
-              id={"zip"}
-              placeholder="ZIP Code"
-              onChange={onChange}
-              value={zip}
-            />
-            <FormButton onClick={onSubmit}>Search</FormButton>
-          </SearchBar>
-        </div>
-      ) : (
-        <div>
-          <DescriptionStyle>
-            We are interested in what you think about these houses in your
-            community. Below, you see ten different houses, each with their own
-            features. When you click a photo of a house or its map marker, you
-            will see more photos of the same house (i.e. its interiors, outdoor
-            space). <strong>Please explore all ten houses.</strong> Then, tell
-            us your <strong>two favorite houses</strong> and your{" "}
-            <strong>two least favorite houses.</strong>
-          </DescriptionStyle>
-          <SearchBar>
-            <Label>Best:</Label>
-            <FormInput2 id={"1"} onChange={handleChange}>
-              <option value="" disabled selected hidden>
-                Please choose the best home...
-              </option>
-              <option value={houses ? houses[0].address : ""}>
-                {houses ? houses[0].address.replace(/-/g, " ") : ""}
-              </option>
-              <option value={houses ? houses[1].address : ""}>
-                {houses ? houses[1].address.replace(/-/g, " ") : ""}
-              </option>
-              <option value={houses ? houses[2].address : ""}>
-                {houses ? houses[2].address.replace(/-/g, " ") : ""}
-              </option>
-              <option value={houses ? houses[3].address : ""}>
-                {houses ? houses[3].address.replace(/-/g, " ") : ""}
-              </option>
-              <option value={houses ? houses[4].address : ""}>
-                {houses ? houses[4].address.replace(/-/g, " ") : ""}
-              </option>
-              <option value={houses ? houses[5].address : ""}>
-                {houses ? houses[5].address.replace(/-/g, " ") : ""}
-              </option>
-              <option value={houses ? houses[6].address : ""}>
-                {houses ? houses[6].address.replace(/-/g, " ") : ""}
-              </option>
-              <option value={houses ? houses[7].address : ""}>
-                {houses ? houses[7].address.replace(/-/g, " ") : ""}
-              </option>
-              <option value={houses ? houses[8].address : ""}>
-                {houses ? houses[8].address.replace(/-/g, " ") : ""}
-              </option>
-              <option value={houses ? houses[9].address : ""}>
-                {houses ? houses[9].address.replace(/-/g, " ") : ""}
-              </option>
-            </FormInput2>
-            <Label>2nd Best:</Label>
-            <FormInput2 id={"2"} onChange={handleChange}>
-              <option value="" disabled selected hidden>
-                Please choose the 2nd best home...
-              </option>
-              <option value={houses ? houses[0].address : ""}>
-                {houses ? houses[0].address.replace(/-/g, " ") : ""}
-              </option>
-              <option value={houses ? houses[1].address : ""}>
-                {houses ? houses[1].address.replace(/-/g, " ") : ""}
-              </option>
-              <option value={houses ? houses[2].address : ""}>
-                {houses ? houses[2].address.replace(/-/g, " ") : ""}
-              </option>
-              <option value={houses ? houses[3].address : ""}>
-                {houses ? houses[3].address.replace(/-/g, " ") : ""}
-              </option>
-              <option value={houses ? houses[4].address : ""}>
-                {houses ? houses[4].address.replace(/-/g, " ") : ""}
-              </option>
-              <option value={houses ? houses[5].address : ""}>
-                {houses ? houses[5].address.replace(/-/g, " ") : ""}
-              </option>
-              <option value={houses ? houses[6].address : ""}>
-                {houses ? houses[6].address.replace(/-/g, " ") : ""}
-              </option>
-              <option value={houses ? houses[7].address : ""}>
-                {houses ? houses[7].address.replace(/-/g, " ") : ""}
-              </option>
-              <option value={houses ? houses[8].address : ""}>
-                {houses ? houses[8].address.replace(/-/g, " ") : ""}
-              </option>
-              <option value={houses ? houses[9].address : ""}>
-                {houses ? houses[9].address.replace(/-/g, " ") : ""}
-              </option>
-            </FormInput2>
-            <Label>Worst:</Label>
-            <FormInput2 id={"4"} onChange={handleChange}>
-              <option value="" disabled selected hidden>
-                Please choose the worst home...
-              </option>
-              <option value={houses ? houses[0].address : ""}>
-                {houses ? houses[0].address.replace(/-/g, " ") : ""}
-              </option>
-              <option value={houses ? houses[1].address : ""}>
-                {houses ? houses[1].address.replace(/-/g, " ") : ""}
-              </option>
-              <option value={houses ? houses[2].address : ""}>
-                {houses ? houses[2].address.replace(/-/g, " ") : ""}
-              </option>
-              <option value={houses ? houses[3].address : ""}>
-                {houses ? houses[3].address.replace(/-/g, " ") : ""}
-              </option>
-              <option value={houses ? houses[4].address : ""}>
-                {houses ? houses[4].address.replace(/-/g, " ") : ""}
-              </option>
-              <option value={houses ? houses[5].address : ""}>
-                {houses ? houses[5].address.replace(/-/g, " ") : ""}
-              </option>
-              <option value={houses ? houses[6].address : ""}>
-                {houses ? houses[6].address.replace(/-/g, " ") : ""}
-              </option>
-              <option value={houses ? houses[7].address : ""}>
-                {houses ? houses[7].address.replace(/-/g, " ") : ""}
-              </option>
-              <option value={houses ? houses[8].address : ""}>
-                {houses ? houses[8].address.replace(/-/g, " ") : ""}
-              </option>
-              <option value={houses ? houses[9].address : ""}>
-                {houses ? houses[9].address.replace(/-/g, " ") : ""}
-              </option>
-            </FormInput2>
-            <Label>2nd Worst:</Label>
-            <FormInput2 id={"3"} onChange={handleChange}>
-              <option value="" disabled selected hidden>
-                Please choose the 2nd worst home...
-              </option>
-              <option value={houses ? houses[0].address : ""}>
-                {houses ? houses[0].address.replace(/-/g, " ") : ""}
-              </option>
-              <option value={houses ? houses[1].address : ""}>
-                {houses ? houses[1].address.replace(/-/g, " ") : ""}
-              </option>
-              <option value={houses ? houses[2].address : ""}>
-                {houses ? houses[2].address.replace(/-/g, " ") : ""}
-              </option>
-              <option value={houses ? houses[3].address : ""}>
-                {houses ? houses[3].address.replace(/-/g, " ") : ""}
-              </option>
-              <option value={houses ? houses[4].address : ""}>
-                {houses ? houses[4].address.replace(/-/g, " ") : ""}
-              </option>
-              <option value={houses ? houses[5].address : ""}>
-                {houses ? houses[5].address.replace(/-/g, " ") : ""}
-              </option>
-              <option value={houses ? houses[6].address : ""}>
-                {houses ? houses[6].address.replace(/-/g, " ") : ""}
-              </option>
-              <option value={houses ? houses[7].address : ""}>
-                {houses ? houses[7].address.replace(/-/g, " ") : ""}
-              </option>
-              <option value={houses ? houses[8].address : ""}>
-                {houses ? houses[8].address.replace(/-/g, " ") : ""}
-              </option>
-              <option value={houses ? houses[9].address : ""}>
-                {houses ? houses[9].address.replace(/-/g, " ") : ""}
-              </option>
-            </FormInput2>
-            <FormButton onClick={handleSubmit}>Submit Ratings</FormButton>
-          </SearchBar>
-        </div>
-      )}
-      <ContentRow>
-        <GoogleMapDisplay
-          houses={houses}
-          show={show}
-          setShow={setShow}
-          targetHouse={targetHouse}
-          setTargetHouse={setTargetHouse}
-        />
+    // for rating submissions
+    const handleSubmit = (ev) => {
+        ev.preventDefault();
 
-        {/* // this manages the house photos */}
-        <HouseCardList
-          style={{ width: "75%", alignSelf: "flex-end" }}
-          houses={houses}
-          show={show}
-          setShow={setShow}
-          targetHouse={targetHouse}
-          setTargetHouse={setTargetHouse}
-        />
-      </ContentRow>
-    </LandingBase>
-  );
+        const endTime = new Date().getTime();
+
+        if (
+            address1 === "" ||
+            address2 === "" ||
+            address3 === "" ||
+            address4 === ""
+        ) {
+            alert("Please make sure to fill out your house selections!");
+        } else if (
+            address1 === address2 ||
+            address1 === address3 ||
+            address1 === address4 ||
+            address2 === address3 ||
+            address2 === address4 ||
+            address3 === address4
+        ) {
+            alert("Please make sure your choices do not overlap!");
+        } else if (endTime - startTime < 5000) {
+            // user must spend at least a minute before submitting
+            alert("Please spend more time exploring the houses before submitting.");
+            console.log(endTime - startTime);
+        } else {
+            axios.post('/api/rating', {
+                bestAddress1: address1,
+                bestAddress2: address2,
+
+                worstAddress2: address3,
+                worstAddress1: address4
+            }, {
+                withCredentials: true
+            }).then(res => {
+                console.log(`Sent rating data for respondent: ${respondent}`);
+
+                alert(
+                    "Thanks for your submission! You can close this window and return to the survey."
+                );
+            }).catch(err => {
+                console.log(err);
+            });
+        }
+    };
+
+    // for changing rating inputs
+    const handleChange = (ev) => {
+        const targetAddress = ev.target.value.replace(/ /g, "-");
+        if (ev.target.id === "1") {
+            setAddress1(targetAddress);
+        } else if (ev.target.id === "2") {
+            setAddress2(targetAddress);
+        } else if (ev.target.id === "3") {
+            setAddress3(targetAddress);
+        } else if (ev.target.id === "4") {
+            setAddress4(targetAddress);
+        }
+    };
+
+    return (
+        <LandingBase>
+            <ErrorBase error={error}/>
+            {!searched ? (
+                <div>
+                    <DescriptionStyle>
+                        We are now going to show you houses in your community. Please enter
+                        your zip code.
+                    </DescriptionStyle>
+                    <SearchBar>
+                        <FormInput
+                            id={"zip"}
+                            placeholder="ZIP Code"
+                            onChange={onChange}
+                            value={zip}
+                        />
+                        <FormButton onClick={onSubmit}>Search</FormButton>
+                    </SearchBar>
+                </div>
+            ) : (
+                <div>
+                    <DescriptionStyle>
+                        We are interested in what you think about these houses in your
+                        community. Below, you see ten different houses, each with their own
+                        features. When you click a photo of a house or its map marker, you
+                        will see more photos of the same house (i.e. its interiors, outdoor
+                        space). <strong>Please explore all ten houses.</strong> Then, tell
+                        us your <strong>two favorite houses</strong> and your{" "}
+                        <strong>two least favorite houses.</strong>
+                    </DescriptionStyle>
+                    <SearchBar>
+                        <Label>Best:</Label>
+                        <FormInput2 id={"1"} onChange={handleChange}>
+                            <option value="" disabled selected hidden>
+                                Please choose the best home...
+                            </option>
+
+                            {houses && <React.Fragment>
+                                {houses.map(h => (
+                                    <option value={h.address}>
+                                        {h.address.replace(/-/g, " ")}
+                                    </option>
+                                ))}
+                            </React.Fragment>}
+                        </FormInput2>
+                        <Label>2nd Best:</Label>
+                        <FormInput2 id={"2"} onChange={handleChange}>
+                            <option value="" disabled selected hidden>
+                                Please choose the 2nd best home...
+                            </option>
+
+                            {houses && <React.Fragment>
+                                {houses.map(h => (
+                                    <option value={h.address}>
+                                        {h.address.replace(/-/g, " ")}
+                                    </option>
+                                ))}
+                            </React.Fragment>}
+
+                        </FormInput2>
+                        <Label>Worst:</Label>
+                        <FormInput2 id={"4"} onChange={handleChange}>
+                            <option value="" disabled selected hidden>
+                                Please choose the worst home...
+                            </option>
+
+                            {houses && <React.Fragment>
+                                {houses.map(h => (
+                                    <option value={h.address}>
+                                        {h.address.replace(/-/g, " ")}
+                                    </option>
+                                ))}
+                            </React.Fragment>}
+
+                        </FormInput2>
+                        <Label>2nd Worst:</Label>
+                        <FormInput2 id={"3"} onChange={handleChange}>
+                            <option value="" disabled selected hidden>
+                                Please choose the 2nd worst home...
+                            </option>
+
+                            {houses && <React.Fragment>
+                                {houses.map(h => (
+                                    <option value={h.address}>
+                                        {h.address.replace(/-/g, " ")}
+                                    </option>
+                                ))}
+                            </React.Fragment>}
+
+                        </FormInput2>
+                        <FormButton onClick={handleSubmit}>Submit Ratings</FormButton>
+                    </SearchBar>
+                </div>
+            )}
+            <ContentRow>
+                <GoogleMapDisplay
+                    houses={houses}
+                    show={show}
+                    setShow={setShow}
+                    targetHouse={targetHouse}
+                    setTargetHouse={setTargetHouse}
+                />
+
+                {/* // this manages the house photos */}
+                <HouseCardList
+                    style={{width: "75%", alignSelf: "flex-end"}}
+                    houses={houses}
+                    show={show}
+                    setShow={setShow}
+                    targetHouse={targetHouse}
+                    setTargetHouse={setTargetHouse}
+                />
+            </ContentRow>
+        </LandingBase>
+    );
 };
