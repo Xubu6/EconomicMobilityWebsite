@@ -10,6 +10,7 @@ module.exports = {
     MONGODB_URI: process.env.MONGODB_URI,
 
     SESSION_SECRET: process.env.SESSION_SECRET,
+    SESSION_DOMAIN: process.env.SESSION_DOMAIN,
 
     PORT: Number(process.env.PORT) || 8080,
 
